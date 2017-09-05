@@ -1,0 +1,64 @@
+---
+title: Git常用命令
+date: 2017-09-05 16:32:41
+tags:
+	- Git
+---
+### 设置
+``` bash
+#告诉Github，你要使用的用户名
+$ git config --global user.name "Your Name Here"
+#设置邮箱 
+$ git config --global user.email "your_email@example.com"
+#查看用户名和邮箱
+$ git config user.name[user.email]
+#查看所有配置项
+$ git config -l[--list]
+```
+<!-- more -->
+
+### 日常
+``` bash
+#克隆项目到本地[将项目拉到本地]
+$ git clone https://github.com/gavincook/test.git
+#将所有的改动加入缓存区
+$ git add .
+#将改动提交到本地仓库[提交时添加-a可省略前一步加入缓存区的操作]
+$ git commit [-a] -m "备注信息"
+#更新远程版本库关联分支的变化至本地当前所在的分支
+$ git pull [remote] [branch]
+```
+### 远程
+``` bash
+#设置远程版本库地址
+$ git remote add origin https://github.com/maode/workInfo.git
+
+#将本地的master分支推送到origin主机的master分支。此处省略了origin主机的分支名，如果远程分支不存在，则会被新建。
+$ git push origin master
+
+#如果当前分支与远程分支存在追踪关系，则可以省略来源地分支名和目的地分支名都可以省略。如下：
+$ git push origin
+
+#如果当前分支只和一个远程主机有追踪分支，那么主机名也可以省略。如下：
+$ git push
+
+#如果当前分支与多个主机存在追踪关系，则可以使用-u选项指定一个默认主机，设置完成后就可以不加任何参数使用git push进行远程推送了。如下：
+$ git push -u origin master
+```
+### Demo
+创建一个新的[本地]资源库,并推送到https://github.com/maode/workInfo.git
+``` bash
+#1.在本地创建"README.md"文件
+$ touch README.md
+#2.初始化资源库【初始化一个本地未加入版本控制的现有的项目】
+$ git init
+#3.添加文件到版本库
+$ git add README.md
+#4.提交更改到本地版本库
+$ git commit -m "first commit"
+#5.设置远程版本库地址
+$ git remote add origin https://github.com/maode/workInfo.git
+#6.推送到远程版本库
+$ git push -u origin master
+```
+比较详细的介绍可以参考这里：http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html

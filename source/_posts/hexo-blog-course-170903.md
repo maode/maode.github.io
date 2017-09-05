@@ -1,10 +1,9 @@
 ---
 title: hexo搭建GitHub博客过程
 date: 2017-09-03 15:32:41
-toc: true
 tags:
 	- hexo
-	- Git
+	- GitHub
 ---
 ## 环境要求
 **nodejs，git**
