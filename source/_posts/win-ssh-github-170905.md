@@ -45,5 +45,6 @@ Are you sure you want to continue connecting (yes/no)?
 如果成功了，会看到以下提示消息。
 `Hi username! You've successfully authenticated, but GitHub does not
 provide shell access.`
+如果报错，看这里：[链接GitHub报错](https://maode.github.io/2017/09/05/GitHub-link-error-170905/)
 
 官方文档：https://help.github.com/articles/connecting-to-github-with-ssh/
