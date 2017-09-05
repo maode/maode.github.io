@@ -89,15 +89,16 @@ $ hexo deploy
 **过程如下：**
 1. 在GitHub创建博客repo（记得勾选“用README初始化仓库”选项，否则无法进行下一步的分支创建）。
 2. 创建分支hexo
-3. 设置默认分支为hexo（因为博客静态页文件是执行`hexo deploy`命令进行部署的，而hexo框架及文章源码需要手动执行			Git命令进行部署，将hexo设置为默认分支可以在执行`git push`命令时省略指定分支参数，方便些。）
-4. 进入本地hexo文件目录下执行clone命令。clone完成后执行`git branch`应该显示当前在hexo分支下。
-5. 依次执行 `git add . 、 git commit 、git push`命令部署至GitHub的hexo分支。
+3. 设置默认分支为hexo（因为博客静态页文件是执行`hexo deploy`命令进行部署的，而hexo框架及文章源码需要手动执行Git命令进行部署，将hexo设置为默认分支可以在执行`git push`命令时省略指定分支参数，方便些。）
+4. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地。
+5. 打开clone好的`maode.github.io`目录，将`.git/`文件夹和`README.md`文件复制到hexo文件目录下。复制完成后在hexo文件目录下执行`git branch`命令应该显示当前在hexo分支下。
+6. 依次执行 `git add . 、 git commit 、git push`命令部署本地hexo文件至GitHub的hexo分支。
 
 这样就结束了，以后每当写了新的文章，就可以执行`hexo deploy`命令部署文章静态页至master分支，执行Git命令部署hexo文件和源码文件至hexo分支。
 
 **更换电脑或丢失文件后的操作**
 1. 确认电脑环境已配置好（就是装好nodejs和Git） 
-1. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地。
+2. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地。
 2. 进入到clone好的`maode.github.io`（名太长，可以改成别的名，随意）目录下执行 hexo 和 Git部署插件 的安装命令就可以了。
 ``` bash
 $ npm install -g hexo	#安装hexo
