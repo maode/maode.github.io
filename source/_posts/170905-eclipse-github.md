@@ -41,3 +41,33 @@ File》Import》Maven【Existing Maven Projects】》Next【Browser选择刚才�
 在项目上单击右键Team》Remote》Push》在URI中输入GitHub项目的URL、用户名、密码》Next》Source ref:选择master[branch]，会自动填充Source ref:和Destination ref:为“refs/heads/master”》点击 Add all Branch Spec》Finish。
 
 在Crete repository前会有一个“Creation of repositories in the Eclipse workspace is not recommended”提示，不建议在Eclipse的工作空间中创建本地repository，【因为可能引发一连串的问题，或影响性能】可选在其它路径下创建，随意，放在工作空间中比较方便管理，目前还没发现什么问题，有问题再说吧！
+
+--------------------------------------------------------------------------------
+## 常用操作：
+### 配置
+**Remote：** 远程仓库，可在此处配置多个不同的远程仓库。
+
+【push...】  可以将项目push到指定的远程仓库地址。
+
+【Fetch From...】  可从指定的远程仓库地址抓取项目到本地。
+
+【Configure Push to Upstream...】配置推送的远程仓库。
+
+【Configure Fetch from Upstream...】配置抓取的远程仓库。
+
+
+![](/assets/blogImg/170905-eclipse-github-1.png)
+
+### 日常
+【Pull】	更新远程仓库的变更信息至本地仓库，比较常用，每次远程版本库有变更都需要先Pull一下。
+
+【commit...】  提交，提交至本地仓库。
+
+【Push to Upstream】  将本地仓库推送至当前默认远程仓库的默认分支。
+
+【Fetch from Upstream】  从当前默认远程仓库的默认分支抓取项目到本地仓库。
+
+【Push Branch...】  将本地仓库推送至指定远程仓库的指定分支。
+
+
+![](/assets/blogImg/170905-eclipse-github-2.png)

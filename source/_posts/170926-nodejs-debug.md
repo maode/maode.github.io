@@ -5,7 +5,9 @@ tags:
 	- Node.js
 	- DevTools
 ---
-devtool 已经并入node.js v6.3.0以上版本的核心包，所以不用再installe。
+devtool 已经并入node.js v6.3.0以上版本的核心包，所以不用再installe。可以直接开整。如下：
+
+调试 `mrd.js` 并在该文件第一句断点。
 ``` bash
 $ node --inspect --debug-brk mrd.js # debug mrd.js 并在该文件第一句断点
 ```
