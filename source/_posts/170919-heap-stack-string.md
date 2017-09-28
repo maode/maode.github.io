@@ -229,4 +229,4 @@ JDK8彻底移除PermGen后，这些对象被挪到GC堆外的一块叫做Metaspa
 [字面量]: https://zh.wikipedia.org/wiki/%E5%AD%97%E9%9D%A2%E5%B8%B8%E9%87%8F_(C%E8%AF%AD%E8%A8%80)
 [HotSpot VM]: https://zh.wikipedia.org/wiki/HotSpot
 [类在加载时]: http://wiki.jikexueyuan.com/project/java-vm/class-loading-mechanism.html
-[javap]: https://maode.github.io/2017/09/02/170921-javap/
+[javap]: https://maode.github.io/2017/09/18/170918-javap/
