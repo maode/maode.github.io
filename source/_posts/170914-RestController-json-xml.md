@@ -1,5 +1,5 @@
 ---
-title: \@RestController返回json和xml数据
+title: RestController返回json和xml数据
 date: 2017-09-14 15:32:41
 tags:
 	- springMVC
