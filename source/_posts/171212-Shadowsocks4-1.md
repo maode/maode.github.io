@@ -1,11 +1,11 @@
 ---
-title: 【转载】Shadowsocks一键安装脚本（四合一）
+title: 【转】Shadowsocks一键安装脚本（四合一）
 date: Tue Dec 12 2017 18:46:33
 tags:
 	- Shadowsocks
 ---
 
-**原文：** [秋水逸冰](https://teddysun.com/) » [Shadowsocks 一键安装脚本（四合一）](https://teddysun.com/486.html)
+**转自：** [秋水逸冰](https://teddysun.com/) » [Shadowsocks 一键安装脚本（四合一）](https://teddysun.com/486.html)
 
 ## 本脚本适用环境
 
@@ -244,6 +244,7 @@ tls1.2_ticket_fastauth_compatible
 ### 相关文章
 网络加速：[一键安装最新内核并开启 BBR 脚本](https://teddysun.com/489.html)
 协议混淆：[如何安装和配置simple-obfs服务端](https://teddysun.com/511.html)
+各种安装优化：[shadowsocks_install](https://github.com/iMeiji/shadowsocks_install)
 
 
 
