@@ -29,10 +29,10 @@ Hibernate强的地方就在于，一个PO脱离Session之后，还能保持状�
 因此，我们来看看例子： 
 
 ``` java
-1.  Foo foo=sess.load(Foo.class,id);
-2.  foo.setXXX(xxx);
-3.  sess.flush();
-4.  sess.commit();
+  Foo foo=sess.load(Foo.class,id);
+  foo.setXXX(xxx);
+  sess.flush();
+  sess.commit();
 ```
 PO对象foo的操作都在一个Session生命周期内完成，因此不需要显式的进行sess.update(foo)这样的操作。Hibernate会自动监测到foo对象已经被修改过，因此就向数据库发送一个update的sql。当然如果你非要加上sess.update(foo)也不会错，只不过这样做没有任何必要。 
 
@@ -40,17 +40,17 @@ PO对象foo的操作都在一个Session生命周期内完成，因此不需要�
 
 
 ``` java
-1.  // in the first session   
-2.  Cat cat = (Cat); firstSession.load(Cat.class, catId);;   
-3.  Cat potentialMate = new Cat();;   
-4.  firstSession.save(potentialMate);;   
+  // in the first session   
+  Cat cat = (Cat); firstSession.load(Cat.class, catId);   
+  Cat potentialMate = new Cat();   
+  firstSession.save(potentialMate);   
 
-6.  // in a higher tier of the application   
-7.  cat.setMate(potentialMate);;   
+  // in a higher tier of the application   
+  cat.setMate(potentialMate);   
 
-9.  // later, in a new session   
-10.  secondSession.update(cat);;  // update cat   
-11.  secondSession.update(mate);; // update mate  
+  // later, in a new session   
+  secondSession.update(cat);  // update cat   
+  secondSession.update(mate); // update mate  
 ```
 cat和mate对象是在第一个session中取得的，在第一个session关闭之后，他们就成了PO的第三种状态，和Session已经detached的PO，此时他们的状态信息仍然被保留下来了。当他们进入第二个session之后，立刻就可以进行状态的更新。但是由于对cat的修改操作：cat.setMate(potentialMate); 是在Session外面进行的，Hibernate不可能知道cat对象已经被改过了，第二个Session并不知道这种修改，因此一定要显式的调用secondSession.update(cat); 通知Hibernate，cat对象已经修改了，你必须发送update的sql了。 
 
@@ -63,33 +63,33 @@ saveOrUpdate和update的区别就在于在跨Session的PO状态管理中，Hiber
 例如当你写一个DAOImpl的时候，让cat对象增加一个mate，如下定义： 
 
 ``` java
-1.  public void addMate(Cat cat, Mate mate); {  
-2.  Session session = ...;  
-3.  Transacton tx = ...;  
-4.  session.update(cat);;  
-5.  cat.addMate(mate);;  
-6.  tx.commit();;  
-7.  session.close();;  
-8.  };  
+public void addMate(Cat cat, Mate mate); {  
+	Session session = ...;  
+	Transacton tx = ...;  
+	session.update(cat);  
+	cat.addMate(mate);  
+	tx.commit();  
+	session.close();  
+};  
 ```
 显然你是需要把Hibernate的操作封装在DAO里面的，让业务层的程序员和Web层的程序员不需要了解Hibernate，直接对DAO进行调用。 
 
 此时问题就来了：上面的代码运行正确有一个必要的前提，那就是方法调用参数cat对象必须是一个已经被持久化过的PO，也就是来说，它应该首先从数据库查询出来，然后才能这样用。但是业务层的程序员显然不知道这种内部的玄妙，如果他的业务是现在增加一个cat，然后再增加它的mate，他显然会这样调用，new一个cat对象出来，然后就addMate： 
 
 ``` java
-1.  Cat cat = new Cat();;  
-2.  cat.setXXX();;  
-3.  daoimpl.addMate(cat,mate);;  
+  Cat cat = new Cat();  
+  cat.setXXX();  
+  daoimpl.addMate(cat,mate);  
 ```
 但是请注意看，这个cat对象只是一个VO，它没有被持久化过，它还不是PO，它没有资格调用addMate方法，因此调用addMate方法不会真正往数据库里面发送update的sql，这个cat对象必须先被save到数据库，在真正成为一个PO之后，才具备addMate的资格。 
 
 你必须这样来操作： 
 
 ``` java
-1.  Cat cat = new Cat();;  
-2.  cat.setXXX();;  
-3.  daoimpl.addCat(cat);;  
-4.  daoimpl.addMate(cat, mate);;  
+  Cat cat = new Cat();  
+  cat.setXXX();  
+  daoimpl.addCat(cat);  
+  daoimpl.addMate(cat, mate);  
 ```
 先持久化cat，然后才能对cat进行其他的持久化操作。因此要求业务层的程序员必须清楚cat对象处于何种状态，到底是第一种，还是第三种。如果是第一种，就要先save，再addMate；如果是第三种，就直接addMate。 
 
@@ -100,14 +100,14 @@ saveOrUpdate和update的区别就在于在跨Session的PO状态管理中，Hiber
 现在你需要修改addMate方法： 
 
 ``` java
-1.  public void addMate(Cat cat, Mate mate); {  
-2.  Session session = ...;  
-3.  Transacton tx = ...;  
-4.  session.saveOrUpdate(cat);;  
-5.  cat.addMate(mate);;  
-6.  tx.commit();;  
-7.  session.close();;  
-8.  };  
+  public void addMate(Cat cat, Mate mate) {  
+	  Session session = ...;  
+	  Transacton tx = ...;  
+	  session.saveOrUpdate(cat);
+	  cat.addMate(mate);
+	  tx.commit();
+	  session.close();
+  };  
 ```
 如上，如果业务层的程序员传进来的是一个已经持久化过的PO对象，那么Hibernate会更新cat对象(假设业务层的程序员在Session外面修改过cat的属性)，如果传进来的是一个新new出来的对象，那么向数据库save这个PO对象。 
 
@@ -116,7 +116,7 @@ BTW: Hibernate此时究竟采取更新cat对象，还是save cat对象，取决�
 这样，业务层的程序员就不必再操心PO的状态问题了，对于他们来说，不管cat是new出来的对象，只是一个VO也好；还是从数据库查询出来的的PO对象也好，全部都是直接addMate就OK了： 
 
 ``` java
-1.  daoimple.addMate(cat, mate);;  
+  daoimple.addMate(cat, mate);  
 ```
 这便是saveOrUpdate的作用。
 

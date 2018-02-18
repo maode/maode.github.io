@@ -1,3 +1,4 @@
+@echo off
 @echo -----------
 @echo  иЗЁиндуб
 @echo  hexo g
