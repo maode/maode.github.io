@@ -16,4 +16,4 @@ call hexo d
 call git add .
 call git commit -m "添加新文章"
 call git push
-@echo bat执行结束，按任意键退出 & pause > nul
+::@echo bat执行结束，按任意键退出 & pause > nul
