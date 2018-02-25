@@ -11,7 +11,7 @@ call hexo g
 call hexo d
 @echo -----------
 @echo  部署文章源文件（.md文件）到Git
-@echo  hexo d
+@echo  git add commit push
 @echo -----------
 call git add .
 call git commit -m "添加新文章"

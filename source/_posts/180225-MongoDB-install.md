@@ -81,12 +81,12 @@ mongod --logpath "D:\software\MongoDB\Server\3.6\logs\mongodb.log" --logappend -
 `-dbpath` 指向刚才创建的用来存放数据库文件的路径。
 `--logappend` 以追加的方式记录日志。
 `--serviceName` 注册的服务名。
-注册完成后，可以在cmd窗口执行`services.msc`命令，在弹出的服务列表中能够看到我们新注册的名字为“mongodb”的服务，默认是自动启动的，如果不想自动启动，可以改为手动。手动启动的方式和启动其它windows服务是一样的。`net start mongodb`。
+注册完成后，可以在cmd窗口执行`services.msc`命令，在弹出的服务列表中能够看到我们新注册的名字为“mongodb”的服务，默认是自动启动的，如果不想自动启动，可以改为手动。手动启动的方式和启动其它windows服务是一样的。`net start mongodb`(以管理员身份运行否则"拒绝访问")。
 
 **关闭服务**推荐使用上面介绍的 `db.shutdownServer()` 命令。
 
 如果要从windows服务中**注销（删除）该服务**，使用命令：
-`mongod.exe --remove --serviceName "mongodb"`
+`mongod --remove --serviceName "mongodb"`
 
 ## 图形界面
 
