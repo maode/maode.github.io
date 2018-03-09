@@ -8,7 +8,9 @@ tags:
 **转自：** http://blog.csdn.net/LPFSuperMan/article/details/78287265
 
 这个版本比较旧了，比较全的配置可以参照官方的介绍
+
 **官方文档：** https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
+
 ```ini
 # ----------------------------------------
 # 核心属性
