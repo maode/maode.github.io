@@ -23,6 +23,9 @@ tags:
 ### 自定义gradle本地仓库
 有几种不同的方式，大多采用配置环境变量的方式。
 设置一个名称为`GRADLE_USER_HOME`的环境变量指向自定义的仓库目录。
+
+<!-- more -->
+
 ```bat
 setx GRADLE_USER_HOME "D:\repos\gradle"
 ```

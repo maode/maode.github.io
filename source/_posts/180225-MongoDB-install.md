@@ -29,10 +29,14 @@ mongod.exe --dbpath "D:\software\MongoDB\Server\3.6\data"
 ```
 `--dbpath`指向刚才新建的数据库目录。如果不指定，默认会在C盘创建一个文件夹用来存放数据。
 正常的话控制台会打印一大串信息，开头是启动的进程id，系统信息等等，最后一行是端口信息。如：`2018-02-25T22:05:23.019+0800 I NETWORK  [initandlisten] waiting for connections on port 27017`。
+
 ### 测试链接
 目前服务已经启动，处于等待链接状态，这时另外打开一个cmd命令窗口用来测试一下链接。
 （记得如果没有配置环境变量的话，要切换到bin目录下去执行命令）
 在新打开的cmd命令窗口执行命令 `mongo` 如果没问题的话，控制台会打印链接信息。如下：
+
+<!-- more -->
+
 ```bat
 C:\Users\code0>mongo
 MongoDB shell version v3.6.3

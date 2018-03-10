@@ -11,6 +11,8 @@ tags:
 
 **官方文档：** https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 
+<!-- more -->
+
 ```ini
 # ----------------------------------------
 # 核心属性

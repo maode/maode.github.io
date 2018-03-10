@@ -14,6 +14,8 @@ tags:
 ### 打开 sparse checkout 功能
 如果本地还没有建版本库，要用这个功能，先进入要放版本库的目录，在命令行执行几条命令：
 
+<!-- more -->
+
 ```bash
 $ git init <project>
 $ cd <project>
