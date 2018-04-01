@@ -19,8 +19,10 @@ tags:
 
 ### 日常
 
-- 克隆项目到本地(将项目拉到本地)
-`$ git clone https://github.com/gavincook/test.git`
+- 克隆项目到本地(将项目拉到本地，包含远程版本库的所有历史提交)
+`$ git clone https://github.com/maode/workInfo.git`
+- 克隆项目到本地（`--depth <depth>`浅克隆，只包含远程版本库的<depth> + 1个历史提交）
+`$ git clone --depth 1 https://github.com/maode/workInfo.git`
 - 将所有的改动加入缓存区
 `$ git add .`
 - 将改动提交到本地仓库(提交时添加-a可省略前一步加入缓存区的操作)
