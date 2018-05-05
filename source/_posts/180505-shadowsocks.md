@@ -112,21 +112,21 @@ systemctl enable shadowsocks #设置开机自启动
 客户端：
 ``` bash
 ● shadowsocks.service - Shadowsocks
-   Loaded: loaded (/etc/systemd/system/shadowsocks.service; enabled; vendor pres
-   Active: active (running) since 六 2018-05-05 12:48:22 CST; 7h ago
+   Loaded: loaded (/etc/systemd/system/shadowsocks.service; enabled; vendor preset: enabled)
+   Active: active (running) since 六 2018-05-05 12:48:22 CST; 9h ago
  Main PID: 833 (sslocal)
    CGroup: /system.slice/shadowsocks.service
-           └─833 /usr/bin/python /usr/bin/sslocal -c /etc/shadowsocks/config.jso
+           └─833 /usr/bin/python /usr/bin/sslocal -c /etc/shadowsocks/config.json
 ```
 
 服务端：
 ``` bash
 ● shadowsocks.service - Shadowsocks
-   Loaded: loaded (/etc/systemd/system/shadowsocks.service; enabled; vendor preset: disabled)
+   Loaded: loaded (/etc/systemd/system/shadowsocks.service; enabled; vendor preset: enabled)
    Active: active (running) since Mon 2017-12-21 23:51:48 CST; 11min ago
  Main PID: 19334 (ssserver)
    CGroup: /system.slice/shadowsocks.service
-           └─19334 /usr/bin/python /usr/bin/ssserver -c /etc/shadowsocks.json
+           └─19334 /usr/bin/python /usr/bin/ssserver -c /etc/shadowsocks/config.json
 ```
 
 
