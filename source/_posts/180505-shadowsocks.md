@@ -129,7 +129,11 @@ systemctl enable shadowsocks #设置开机自启动
            └─19334 /usr/bin/python /usr/bin/ssserver -c /etc/shadowsocks/config.json
 ```
 
+## 一键安装脚本
+如果不想手动配置可以使用傻瓜式的一键安装脚本：
+https://maode.github.io/2017/12/12/171212-Shadowsocks4-1/
 
+## 参考
 shadowsocks参考：
 https://wiki.archlinux.org/index.php/Shadowsocks_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)#.E5.91.BD.E4.BB.A4.E8.A1.8C
 
