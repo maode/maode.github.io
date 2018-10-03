@@ -95,7 +95,7 @@ $ hexo deploy
 
 这样就结束了，以后每当写了新的文章，就可以执行`hexo deploy`命令部署文章静态页至master分支，执行Git命令部署hexo文件和源码文件至hexo分支。
 
-**更换电脑或丢失文件后的操作**
+### 更换电脑或丢失文件后的操作
 1. 确认电脑环境已配置好（就是装好nodejs和Git） 
 2. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地。
 2. 进入到clone好的`maode.github.io`（名太长，可以改成别的名，随意）目录下执行 hexo 和 Git部署插件 的安装命令就可以了。
@@ -103,7 +103,9 @@ $ hexo deploy
 $ npm install -g hexo	#安装hexo
 $ npm install hexo-deployer-git --save	#安装git部署插件
 ```
-**注意：** 不需要执行初始化命令，因为配置文件是从GitHub克隆下来的，一执行就全部恢复出厂设置了。白玩了。
+**注意：** 不需要执行初始化命令`hexo init`，因为配置文件是从GitHub克隆下来的，一执行就全部恢复出厂设置了。白玩了。
+
+如果在是在Linux下不执行初始化命令的话可能会报错“无法识别hexo命令”，这时也可以选择在另一个目录执行一下`hexo init`，然后按照上面的第二部的命令在该目录下安装hexo和部署插件，再将“git clone”下下来的文件全选复制到该目录下即可。**【如果新安装的hexo版本和原来的不一致，复制粘贴时不要覆盖package.json文件】**
 
 
 

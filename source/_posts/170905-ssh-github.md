@@ -1,5 +1,5 @@
 ---
-title: windows下通过SSH链接GitHub
+title: windows和Linux下通过SSH链接GitHub
 date: 2017-09-05 15:32:41
 tags:
 	- GitHub

@@ -35,6 +35,12 @@ tags:
 `$ git remote add origin https://github.com/maode/workInfo.git`
 - 手动建立追踪关系(该命令表示将本地master分支与origin主机的next分支建立追踪关系)
 `$ git branch --set-upstream master origin/next`
+- 为当前分支最后一次commit打个轻量级标签,标签名为“v1.0”
+`$ git tag v1.0`
+- 为当前分支最后一次commit打个带说明的标签。`-a`指定标签名，`-m`指定说明文字。
+`$ git tag -a v0.1 -m "这是标签说明"`
+- 将本地仓库打的标签推送到远程仓库
+`$ git push origin --tags`
 
 ### pull
 
@@ -74,7 +80,34 @@ tags:
 `$ git push origin :master` 或 `$ git push origin --delete master`
 (`$ git push origin :master` 该写法省略了本地分支名相当于推送一个空的本地分支到origin主机的master分支)
 
+### tag
 
+- 为最后一次commit创建一个轻量级标签
+`$ git tag <tagname> `
+- 为最后一次commit创建一个带说明的标签
+`$ git tag -a <tagname> -m <msg>`
+- 查看历史提交的'commit id'
+`$ git log --pretty=oneline`
+- 为指定的'commit id'创建一个轻量级标签
+`$ git tag <tagname> <commit id>`
+- 查看所有标签
+`$ git tag`
+- 查看某个标签的信息
+`$ git show <tagname>`
+- 用私钥签名一个标签【需已安装gpg（GnuPG）,没有秘钥时会报错】
+`$ git tag -s <tagname> -m <msg> <commit id>`
+- 用 GPG 来验证签名标签【需要有签署者的公钥，否则会报错】
+`$ git tag -v <tagname>`
+- 推送指定标签到远程仓库
+`$ git push origin <tagname>`
+- 推送所有标签到远程仓库
+`$ git push origin --tags`
+- 删除本地仓库标签
+`$ git tag -d <tagname>`
+- 删除远程仓库的标签【用推送的空的同名版本的方式达到删除线上版本的目的】
+`$ git push origin :refs/tags/<tagname>`
+- 获取远程仓库某个标签对应的版本
+`$ git fetch origin tag <tagname>`
 
 ### Demo
 创建一个新的[本地]资源库,并推送到https://github.com/maode/workInfo.git
