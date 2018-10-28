@@ -1,9 +1,8 @@
 ---
-title: SSH端口转发和链接保活
+title: ssh端口转发和链接保活
 date: 2018-10-23 15:32:41
 tags:
-	- SSH端口转发
-	- SSH链接保活
+	- ssh
 ---
 SSH的端口转发功能默认是打开的。该配置位于ssh server主机的 `/etc/ssh/sshd_config` 配置文件中，默认为`AllowTcpForwarding yes`，转发时还要注意防火墙配置，确保用到的端口未被屏蔽。
 
@@ -69,6 +68,7 @@ ssh -D <ssh-client主机绑定的地址:端口> <ssh-server连接串>
 `$ ssh -g -D 1080 code0@10.194.77.13`
 在ssh client所在主机上执行以上命令，表示：将ssh client主机网卡绑定的所有地址的1080端口接收到的请求，转发到以code0用户登录的`10.194.77.13`这台ssh server主机，然后以该ssh server主机的身份发起建立对应的连接。
 
+<!-- more -->
 
 ## 关于地址绑定
 

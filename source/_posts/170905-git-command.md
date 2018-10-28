@@ -110,7 +110,8 @@ tags:
 `$ git fetch origin tag <tagname>`
 
 ### Demo
-创建一个新的[本地]资源库,并推送到https://github.com/maode/workInfo.git
+
+**创建一个新的[本地]资源库,并推送到https://github.com/maode/workInfo.git**
 
 1. 在本地创建"README.md"文件
 `$ touch README.md`
@@ -120,10 +121,17 @@ tags:
 `$ git add README.md`
 4. 提交更改到本地版本库
 `$ git commit -m "first commit"`
-5. 设置远程版本库地址
+5. 设置远程版本库地址，并起名为origin
 `$ git remote add origin https://github.com/maode/workInfo.git`
-6. 推送到远程版本库
+6. 推送到远程版本库【`-u`参数表示将远程库`origin`绑定为默认的远程库。以后使用简单的`git push`指令时，就默认提交到该远程库】
 `$ git push -u origin master`
+
+**将本地已经存在的仓库推送到远程仓库**
+1. 设置远程仓库地址
+`$ git remote add origin git@github.com:maode/xxx.git`
+2. 推送
+`$ git push -u origin master`
+
 
 比较详细的介绍可以参考[官方文档](https://git-scm.com/book/zh/v2)
 或者参考这里：http://www.ruanyifeng.com/blog/2015/12/git-cheat-sheet.html
