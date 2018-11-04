@@ -9,6 +9,9 @@ tags:
 
 这是自定义的Yu Writer 编辑器下的空白模板。
 
+| 标题1| 标题2 |
+|:-:|:-:|
+| 内容1 | 内容2 |
 
 ![图片](/assets/blogImg/xxx.png)
 
