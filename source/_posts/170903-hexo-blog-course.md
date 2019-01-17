@@ -13,19 +13,20 @@ tags:
 <!-- more -->
 
 ## hexo配置
-因为hexo是使用nodejs编写的一个博客框架，所以安装完nodejs后，直接打开cmd窗口执行以下命令即可完成hexo的安装
+因为hexo是使用nodejs编写的一个博客框架，所以安装完nodejs后，直接打开cmd窗口执行以下命令即可完成hexo的安装.
+以下安装命令为当前安装时的命令,随着hexo版本升级命令可能会有变动,具体再安装时可参考官网:https://hexo.io
 
 ### hexo安装
-``` bash
-$ npm install -g hexo
+```bash
+$ npm install hexo-cli -g
 ```
 安装完成后执行以下命令显示hexo版本号即为安装成功
-``` bash
+```bash
 $ hexo -v
 ```
 ### hexo初始化
 选择或创建一个用来存放hexo博客文件的文件夹如`D:\Blog`，然后进行入到该路径下执行命令。
-``` bash
+```bash
 $ hexo init	#初始化，完成后会在/source/_posts/目录下生成一篇hello World文章
 $ hexo server	#启动本地web服务
 ```
@@ -35,7 +36,7 @@ $ hexo server	#启动本地web服务
 hexo默认主题为 landscape，可更换为其它主题。
 下载安装 `yilia` 主题：
 进入hexo博客根路径下执行以下命令。
-``` bash
+```bash
 $ git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia
 ```
 主题下载完成后会存放在 `/themes/` 路径下。
@@ -49,7 +50,7 @@ $ git clone https://github.com/litten/hexo-theme-yilia.git themes/yilia
 修改完主题的配置后执行 `hexo server` 访问 http://localhost:4000 查看效果。
 
 ### 创建新文章
-``` bash
+```bash
 $ hexo new 文章名称	#创建一篇新文章
 $ hexo generate		#将文章生成为静态页面
 ```
@@ -62,11 +63,11 @@ deploy:
 	branch: master
 ```
 安装git部署插件
-``` bash
+```bash
 $ npm install hexo-deployer-git --save
 ```
 执行部署命令
-``` bash
+```bash
 $ hexo deploy
 ```
 部署命令执行后，会将`/public`路径下生成的所有静态文章页面部署至GitHub。
@@ -97,15 +98,15 @@ $ hexo deploy
 
 ### 更换电脑或丢失文件后的操作
 1. 确认电脑环境已配置好（就是装好nodejs和Git） 
-2. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地。
-2. 进入到clone好的`maode.github.io`（名太长，可以改成别的名，随意）目录下执行 hexo 和 Git部署插件 的安装命令就可以了。
-``` bash
-$ npm install -g hexo	#安装hexo
-$ npm install hexo-deployer-git --save	#安装git部署插件
-```
-**注意：** 不需要执行初始化命令`hexo init`，因为配置文件是从GitHub克隆下来的，一执行就全部恢复出厂设置了。白玩了。
+2. 安装初始化hexo和git-deployer插件的.如:
+ `npm install hexo-cli -g ` #全局安装hexo
+ `hexo init Blog ` #在当前目录创建Blog文件夹,并将其初始化为hexo博客目录
+ `npm install hexo-deployer-git --save ` #安装git部署插件
+3. 删除hexo自带的hello-world文章。(将博客根目录下的`source`文件夹删除即可)
+4. 使用`git clone git@github.com:maode/maode.github.io.git`命令克隆hexo分支到本地某个目录下。
+5. 进入到clone好的`maode.github.io`目录下,将所有内容覆盖复制到刚刚初始化完的`Blog`目录下。
 
-如果在是在Linux下不执行初始化命令的话可能会报错“无法识别hexo命令”，这时也可以选择在另一个目录执行一下`hexo init`，然后按照上面的第二部的命令在该目录下安装hexo和部署插件，再将“git clone”下下来的文件全选复制到该目录下即可。**【如果新安装的hexo版本和原来的不一致，复制粘贴时不要覆盖package.json文件】**
+以上便完成了hexo更换电脑后的迁移,可执行`hexo server`命令查看迁移后的效果，如提示缺少插件，根据提示安装相应的插件即可。
 
 
 
