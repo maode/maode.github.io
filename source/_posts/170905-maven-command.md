@@ -39,7 +39,7 @@ tags:
 
 - 将本地jar安装到本地仓库
 
-  `mvn install:install-file -Dfile=? -DgroupId=? -DartifactId=? -Dversion=?`
+  `mvn install:install-file -Dfile=? -DgroupId=? -DartifactId=? -Dversion=? -Dpackaging=? -DgeneratePom=?`
   mvn install:install-file 
   -Dfile=本地jar路径 
   -DgroupId=设置groupId 
