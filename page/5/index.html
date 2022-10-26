@@ -136,35 +136,30 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-170926-nodejs-debug" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-181003-netty" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/26/170926-nodejs-debug/">Debugging Node.js with DevTools</a>
+      <a class="article-title" href="/2018/10/03/181003-netty/">Netty知识点记录</a>
     </h1>
   
 
         
-        <a href="/2017/09/26/170926-nodejs-debug/" class="archive-article-date">
-  	<time datetime="2017-09-26T14:37:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-26</time>
+        <a href="/2018/10/03/181003-netty/" class="archive-article-date">
+  	<time datetime="2018-10-03T13:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>devtool 已经并入node.js v6.3.0以上版本的核心包，所以不用再installe。可以直接开整。如下：</p>
-<p>调试 <code>mrd.js</code> 并在该文件第一句断点。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ node --inspect --debug-brk mrd.js <span class="comment"># debug mrd.js 并在该文件第一句断点</span></span><br></pre></td></tr></table></figure>
-<p>打开Chrome在地址栏输入：chrome:&#x2F;&#x2F;inspect </p>
-<p>OK！现在可以开始调试了。就是如此简单。</p>
-<p><strong>如果想让某次的debug过程重新走，在devtool中随便改行代码，然后保存，就可以重头再走一遍了。</strong></p>
-<p>v7+ 版本还可以把以上命令简化为：<code>$ node --inspect-brk mrd.js( v7+)</code><br>我的版本低，没试！</p>
-<h3 id="参考资料："><a href="#参考资料：" class="headerlink" title="参考资料："></a>参考资料：</h3><p><a target="_blank" rel="noopener" href="https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27">https://medium.com/@paul_irish/debugging-node-js-nightlies-with-chrome-devtools-7c4a1b95ae27</a></p>
-<p>暂时就这些，后面没有了！(&#x3D;^ ^&#x3D;)</p>
+        <p>解码器:<br>在进入decode方法处理完业务逻辑后,如果当前缓冲区所有数据已经读完(ridx&#x3D;widx),会自动释放当前信道字节缓冲区中已读取的部分.</p>
+<p>和write有关的方法:<br>write和writeAndFlush调用底层AbstractChannel的内部类AbstractUnsafe的write方法.<br>在该方法中会调用filterOutboundMessage方法对write的数据进行类型判断,只有ByteBuf类型<br>和FileRegion类型的才认为是有效数据,并将改数据返回.否则抛出一个异常(UnsupportedOperationException).<br>如果是数据类型正确,返回了数据,那么会将数据加入outboundBuffer,(当调用flush时会冲刷outboundBuffer将数据写出).<br>如果数据类型不正确,抛出了异常,那么会将数据释放(release)并return;</p>
+<p>同一个Bytebuf对象不能被write多次,因为在调用write时outboundBuffer保存该对象的引用,等到调用flush时,每当成功写出一个对象,都会释放该对象,如果一个对象被write了多次,那么flush时,该对象第一次被写出后就会释放(ChannelOutboundBuffer.remove()),后面的引用再去写出时就会发生异常.<br>调用flush底层会调用<code>AbstractChannel.doWrite(ChannelOutboundBuffer in) ;--&gt;ChannelOutboundBuffer.removeBytes(long writtenBytes);--&gt;ChannelOutboundBuffer.remove();--&gt;ReferenceCountUtil.safeRelease(msg);</code></p>
+<p>（完）</p>
 
       
 
@@ -178,11 +173,278 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Node.js</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Netty</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/03/181003-netty/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-181003-mysql8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/03/181003-mysql8/">mysql8.0常用命令</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/03/181003-mysql8/" class="archive-article-date">
+  	<time datetime="2018-10-03T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>登录mysql</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br><span class="line">$ 密码</span><br></pre></td></tr></table></figure>
+
+<p>查看所有用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use mysql；</span><br><span class="line">mysql&gt; select * from user;</span><br></pre></td></tr></table></figure>
+
+<p>创建用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#创建用户‘htrace22’（`%`表示所有ip均可链接，可制定为具体的ip地址）</span><br><span class="line">mysql&gt; CREATE USER `htrace22`@`%` IDENTIFIED BY &#x27;密码&#x27;;  </span><br><span class="line"></span><br><span class="line">#创建用户‘hszk’并指定加密方式为&#x27;mysql_native_password&#x27;</span><br><span class="line">mysql&gt; CREATE USER &#x27;hszk&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password   BY &#x27;密码&#x27;; </span><br></pre></td></tr></table></figure>
+
+<p>赋权限给用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#授权‘htrace22’用户，拥有所有数据库的所有操作权限</span><br><span class="line">mysql&gt; GRANT ALL ON *.* TO `htrace22`@`%` WITH GRANT OPTION; </span><br><span class="line"></span><br><span class="line">#授权‘hszk’用户，拥有‘parkinglot’数据库的所有操作权限</span><br><span class="line">mysql&gt; GRANT ALL PRIVILEGES ON parkinglot.* TO &#x27;hszk&#x27;@&#x27;%&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>修改用户密码的加密方式为<code>mysql_native_password </code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER USER &#x27;htrace2&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;htrace@20182&#x27; PASSWORD EXPIRE NEVER;</span><br><span class="line">mysql&gt; ALTER USER &#x27;htrace2&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;htrace@20182&#x27;; </span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
+<p>删除用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DROP USER &#x27;htrace2&#x27;@&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/03/181003-mysql8/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-181003-redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/10/03/181003-redis/">redis安装与常用操作</a>
+    </h1>
+  
+
+        
+        <a href="/2018/10/03/181003-redis/" class="archive-article-date">
+  	<time datetime="2018-10-03T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Linux-yum方式安装"><a href="#Linux-yum方式安装" class="headerlink" title="Linux yum方式安装"></a>Linux yum方式安装</h2><p>查找redis的安装文件详情(如果查找不到说明没有以yum的方式安装过该软件包)<br><code>rpm -ql redis</code></p>
+<p>在软件仓库中搜索该软件包<br><code>yum search redis</code></p>
+<p>安装该软件包<br><code>yum -y install redis.x86_64</code></p>
+<p>启动redis服务<br><code>systemctl start redis.service</code></p>
+<p>停止redis服务<br><code>systemctl stop redis.service</code></p>
+<p>重启redis服务<br><code>systemctl restart redis.service</code></p>
+<p>检查redis服务状态<br><code>systemctl status redis.service</code></p>
+<p>随系统启动redis服务(开机自启动)<br><code>systemctl enable redis.service</code></p>
+<p>关闭随系统启动redis服务(关闭开机自启动)<br><code>systemctl disable redis.service</code></p>
+<h2 id="Linux-编译方式安装"><a href="#Linux-编译方式安装" class="headerlink" title="Linux 编译方式安装"></a>Linux 编译方式安装</h2><p>下载,通过wget或其他方式下载最新的redis压缩包.解压编译安装。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br><span class="line">$ tar xzf redis-2.8.17.tar.gz</span><br><span class="line">$ cd redis-2.8.17</span><br><span class="line">$ make</span><br><span class="line">$ make install #可选步骤</span><br></pre></td></tr></table></figure>
+
+<p>解压,编译,安装(执行make编译后,redis的src目录下会生成redis服务程序redis-server,和客户端程序redis-cli,其实就可以用了,不需再执行安装命令make install也可以,如果执行了make install,只会安装redis-server不会安装redis-cli,需要从src目录下手动拷贝一份redis-cli到安装目录,或去src目录下执行redis-cli命令,或添加到path,官网没有make install这一步,直接make就完事了)</p>
+<p> 进入src目录下 执行启动服务命令<br><code>$ ./redis-server ../redis.conf</code></p>
+<h2 id="windows下安装"><a href="#windows下安装" class="headerlink" title="windows下安装"></a>windows下安装</h2><p>(别折腾,直接下载msi安装包比较方便)<br>windows版地址: <a target="_blank" rel="noopener" href="https://github.com/MicrosoftArchive/redis/releases">https://github.com/MicrosoftArchive/redis/releases</a><br>如果有问题可参考:<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e16d23e358c0">https://www.jianshu.com/p/e16d23e358c0</a><br>如果想折腾,可参考安装完成后的安装目录中的”Windows Service Documentation.docx”</p>
+<h2 id="其它常用命令和操作"><a href="#其它常用命令和操作" class="headerlink" title="其它常用命令和操作"></a>其它常用命令和操作</h2><p>备份一下默认配置文件,以防改坏<br><code>cp redis.conf  /某个路径</code></p>
+<p>修改配置文件,以守护进程的方式启动<br><code>vim redis.conf</code> 将 <code>daemonize</code> 改为<code>yes</code></p>
+<p>永久设置密码</p>
+<p>1.修改redis.conf中的<code>requirepass</code>项,然后重启服务生效(该项默认是注释的)<br>2.通过<code>config set requirepass 密码</code>命令设置,然后通过<code>config rewrite</code>命令重写配置文件.立即生效,不用重启.</p>
+<p>临时设置密码</p>
+<p>通过<code>config set requirepass 密码</code>命令设置后,如果不执行<code>config rewrite</code>,则服务重启后本次设置的密码就会失效.</p>
+<p>查看当前redis密码<br><code>config get requirepass</code></p>
+<p>取消密码<br><code>config set requirepass &quot;&quot;</code>命令 或注释配置文件中的<code>requirepass</code>项</p>
+<p>启动redis客户端,并链接到redis服务<br><code>redis-cli -h 地址 -p 端口</code></p>
+<p>启动redis客户端,并链接到redis服务(有密码)<br><code>redis-cli -p 8887 -a 密码</code> 或使用 <code>redis-cli -h 地址 -p 端口</code>链接成功后,再执行<code>auth 密码</code> 即可.</p>
+<p>清除缓存<br><code>redis-cli flushall</code></p>
+<p><strong>关闭redis</strong><br>在未连接到redis的情况下执行(先连接再关闭)：<br><code>redis-cli -h 127.0.0.1 -p 8887 shutdown</code><br>在链接到redis的情况下执行：<br><code>shutdown</code></p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/10/03/181003-redis/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180506-java-random" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/06/180506-java-random/">【转】java生成随机数</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/06/180506-java-random/" class="archive-article-date">
+  	<time datetime="2018-05-06T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-06</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="http://www.cnblogs.com/skywang12345/p/3341423.html">http://www.cnblogs.com/skywang12345/p/3341423.html</a></p>
+<p>本章先讲解Java随机数的几种产生方式，然后通过示例对其进行演示。</p>
+<p>广义上讲，Java中的随机数的有三种产生方式：<br>(01). 通过System.currentTimeMillis()来获取一个当前时间毫秒数的long型数字。<br>(02). 通过Math.random()返回一个0到1之间的double值。<br>(03). 通过Random类来产生一个随机数，这个是专业的Random工具类，功能强大。</p>
+        
+          <a class="article-more-a" href="/2018/05/06/180506-java-random/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">随机数</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">DevTools</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">random</a>
         		</li>
       		
 		</ul>
@@ -192,7 +454,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/26/170926-nodejs-debug/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/05/06/180506-java-random/">展开全文 >></a>
         </p>
       
 
@@ -222,34 +484,34 @@
 
 
   
-    <article id="post-170926-CLI-mrd" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-180506-linux-xfce-mic" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/26/170926-CLI-mrd/">命令行（CLI）mrd开发记录</a>
+      <a class="article-title" href="/2018/05/06/180506-linux-xfce-mic/">linux的xfce桌面打开麦克风</a>
     </h1>
   
 
         
-        <a href="/2017/09/26/170926-CLI-mrd/" class="archive-article-date">
-  	<time datetime="2017-09-26T14:28:32.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-26</time>
+        <a href="/2018/05/06/180506-linux-xfce-mic/" class="archive-article-date">
+  	<time datetime="2018-05-06T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-06</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>首先确保安装配置好node.js的环境。官网：<a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a></p>
-<h2 id="开发过程"><a href="#开发过程" class="headerlink" title="开发过程"></a>开发过程</h2><p>创建一个文件夹用来放mrd项目，如 D:\temp\mrd</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">D:\&gt; <span class="built_in">mkdir</span> D:\temp\mrd</span><br><span class="line"></span><br><span class="line">D:\&gt; <span class="built_in">cd</span> temp\mrd</span><br></pre></td></tr></table></figure>
-<p>初始化：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\temp\mrd&gt; npm init -y</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/09/26/170926-CLI-mrd/#more">more >></a>
-        
+        <p>默认麦克风是禁用的。按以下方法开启。</p>
+<p>点击任务栏面板的“小喇叭”图标</p>
+<p>点击“Sound Settings”</p>
+<p>点击“输入设备”选项卡</p>
+<p>该选项卡有三个小图标“小喇叭，小锁，对号”<br>点击“小喇叭”图标，取消“麦克风静音”</p>
+<p>拖动下面的滚动条，将声音调到合适大小。</p>
+<p>（完）</p>
+
       
 
       
@@ -262,665 +524,411 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CLI</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/26/170926-CLI-mrd/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170922-IDEA-settings" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/22/170922-IDEA-settings/">IDEA配置优化</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/22/170922-IDEA-settings/" class="archive-article-date">
-  	<time datetime="2017-09-22T14:55:24.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-22</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="优化JVM参数"><a href="#优化JVM参数" class="headerlink" title="优化JVM参数"></a>优化JVM参数</h3><p><strong>用户级别修改：</strong><br>打开IDEA，选择Help–&gt;Edit Custom VM Options… 将以下参数内容内容复制过来。<br>（会在操作系统的当前用户目录下生成一份配置文件，如：<code>C:\Users\code0\.IntelliJIdea\config\idea64.exe.vmoptions</code>）</p>
-<p><strong>系统级别修改：</strong><br>直接修改 IntelliJ IDEA 安装目录下的&#x2F;bin&#x2F;idea64.exe.vmoptions【记得备份】文件，如果是32位系统，修改idea.exe.vmoptions文件中的参数。<br>（直接覆写系统默认设置对当前操作系统所有用户都有效）</p>
-<p><strong>具体参数如下：</strong></p>
-<p>-Xms512m<br>-Xmx750m<br>-Xmn264m<br>-XX:MaxPermSize&#x3D;350m<br>-XX:PermSize&#x3D;128m<br>-XX:ReservedCodeCacheSize&#x3D;240m<br>-Xverify:none<br>-Xnoclassgc<br>-XX:+UseParNewGC<br>-XX:+UseConcMarkSweepGC<br>-XX:SoftRefLRUPolicyMSPerMB&#x3D;50<br>-ea<br>-server<br>-Dsun.io.useCanonCaches&#x3D;false<br>-Dsun.awt.keepWorkingSetOnMinimize&#x3D;true<br>-Djava.net.preferIPv4Stack&#x3D;true<br>-XX:+HeapDumpOnOutOfMemoryError<br>-XX:-OmitStackTraceInFastThrow</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">　　注：-Xms512m 设置初时的内存大小，提高Java程序的启动速度</span><br><span class="line"></span><br><span class="line">　　　　-Xmx750m 设置最大内存数，提高该值，可以减少内存Garage收集的频率，提高程序性能。</span><br><span class="line"></span><br><span class="line">　　　　-Xverify：none 关闭Java字节码验证，从而加快了类装入的速度，并使得在仅为验证目的</span><br><span class="line">而启动的过程中无需装入类，缩短了启动时间</span><br><span class="line"></span><br><span class="line">　　　　-XX:+UseParNewGC 使用并行收集算法</span><br><span class="line"></span><br><span class="line">　　　　-server 控制内存garage方式，这样你无需在花一到两分钟等待内存garage的收集</span><br><span class="line"></span><br><span class="line">　　　　-Dsun.awt.keepWorkingSetOnMinimize=true 可以让IDEA最小化到任务栏时依然保持以占有的内存，</span><br><span class="line">      当你重新回到IDEA，能够被快速显示，而不是由灰白的</span><br><span class="line">      界面逐渐显现整个界面，加快回复到原界面的速度。</span><br></pre></td></tr></table></figure>
-<h3 id="基本常用设置"><a href="#基本常用设置" class="headerlink" title="基本常用设置"></a>基本常用设置</h3>
-        
-          <a class="article-more-a" href="/2017/09/22/170922-IDEA-settings/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">IDEA</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/22/170922-IDEA-settings/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170919-heap-stack-string" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/19/170919-heap-stack-string/">Java 堆、栈、方法区、几种常量池，String</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/19/170919-heap-stack-string/" class="archive-article-date">
-  	<time datetime="2017-09-19T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>在JAVA中，数据的交互存在于以下地方：</strong></p>
-<p><strong>寄存器（register）：</strong> 位于CPU。<br><strong>栈（stack）：</strong> 位于RAM。<br><strong>堆（heap）：</strong> 位于RAM。<br><strong>方法区（PermGen）：</strong> 位于RAM。<br><strong>非RAM存储：</strong> 如硬盘等其它存储空间。</p>
-<p><strong>就速度来说，从快到慢依次为： 寄存器 &gt; 栈 &gt; 堆 &gt; 方法区 &gt; 非RAM存储。</strong></p>
-<p><strong>JAVA的JVM的内存可分为3个区：<code>栈(stack)</code>、<code>堆(heap)</code>和<code>方法区(PermGen)</code>也叫永久代。</strong></p>
-        
-          <a class="article-more-a" href="/2017/09/19/170919-heap-stack-string/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">heap、stack</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">堆、栈</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">xfce</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/06/180506-linux-xfce-mic/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180505-linux-install" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/05/180505-linux-install/">Linux软件安装方法</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/05/180505-linux-install/" class="archive-article-date">
+  	<time datetime="2018-05-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>非root用户时，别忘了sudo.</p>
+<h2 id="Debian系"><a href="#Debian系" class="headerlink" title="Debian系"></a>Debian系</h2><p>从软件仓库中下载安装<br><code>apt-cache search packagename</code> 在软件仓库中搜索该软件<br><code>apt-get install packagename</code> 安装<br><code>apt-get -f install packagename</code> 修复安装<br><code>apt-get install packagename --reinstall</code> 重新安装<br><code>apt-get remove packagename</code> 卸载<br><code>apt-get remove packagename --purge</code> 卸载，包括删除配置文件等</p>
+<p>安装下载至本地的deb包<br><code>dpkg -i packagename.deb </code> 安装<br><code>dpkg -r packagename</code> 卸载<br><code>dpkg -P packagename</code> 卸载，包括删除配置文件等<br>也可以使用上面<code>apt-get remove</code>的方式卸载，都可以</p>
+        
+          <a class="article-more-a" href="/2018/05/05/180505-linux-install/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/05/180505-linux-install/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180505-shadowsocks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/05/180505-shadowsocks/">Linux安装shadowsocks</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/05/180505-shadowsocks/" class="archive-article-date">
+  	<time datetime="2018-05-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-05</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><code>sudo apt-get install shadowsocks</code><br>安装完成后根据情况，按照下面的步骤选择配置为客户端或服务端。</p>
+<h2 id="配置为客户端"><a href="#配置为客户端" class="headerlink" title="配置为客户端"></a>配置为客户端</h2><p><code>sudo dpkg -L shadowsocks</code> 查看一下<code>config.json</code>(高版本)或<code>shadowsocks.json</code>（低版本）配置文件的位置。<br><code>sudo vim /etc/shadowsocks/config.json</code> 编辑配置文件，大致如下：</p>
+        
+          <a class="article-more-a" href="/2018/05/05/180505-shadowsocks/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">常量池</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shadowsocks</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/05/180505-shadowsocks/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180415-kiddie-ride" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/15/180415-kiddie-ride/">摇摇车去除投币器</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/15/180415-kiddie-ride/" class="archive-article-date">
+  	<time datetime="2018-04-15T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>偶然购得二手摇摇车一辆，放在家里用，但是每次都要投币好麻烦，于是就想着把投币器去掉。摇摇车用的是“美杰心 8+4接口”的控制器，在网上搜了一下没有找到该控制器对应的资料。投币器有一组连接线，共三根，一黄一白一红，关键点肯定是在这三根线上。后经过一系列的措施试验后的结果是：</p>
+<p><strong>将控制器链接至投币器的这组线剪断，将白线和黄线碰一下就可以启动摇摇车</strong></p>
+<p><strong>猜测：</strong><br>在这组线中，红线为电源线——主要为投币器供电，用来投币时显示投币金额用，不接投币器的话，这根线就没啥用。<br>黄线和白线为信号线，当这两根线链接时，会向控制器发送一个启动信号。</p>
+<p><strong>求证：</strong><br>因为不懂电路，乱猜怕搞坏了小车，又没有在网上找到相关资料，于是在淘宝上找到了一家卖控制器的卖家，请教求证了一下，证实以上猜想是对的，另卖家好心告诫不要让两根信号线长时间接在一起，否则会对控制器造成损害，建议自己买一个小开关接上，非常感谢这位好心的大哥，祝生意兴隆！</p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">摇摇车</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/15/180415-kiddie-ride/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180415-netease-cloud-music " class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/15/180415-netease-cloud-music%20/">Mint下点击网易云音乐桌面图标无法启动</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/15/180415-netease-cloud-music%20/" class="archive-article-date">
+  	<time datetime="2018-04-15T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前的Linux发行版一直用Fedora，出于种种原因，前两天换了一个Mint，结果装上网易云音乐后，发现点击桌面图标没有反应，在终端中也需要sudo命令才能打开。网上搜了一下，确认应该是网易云音乐中依赖的某个模块的权限问题，网上五花八门好多解决方案，我都没用，我试着在桌面图标上<strong>右键–&gt;属性–&gt;启动器</strong>界面中的<strong>命令：</strong>文本框中的内容<code>netease-cloud-music %U</code>前面加了<code>sudo</code>.即改为了<code>sudo netease-cloud-music %U</code>结果就搞定了，双击图标，网易云音乐正常启动了。</p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/15/180415-netease-cloud-music%20/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180415-nodejs-hexo" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/15/180415-nodejs-hexo/">Linux安装nvm和smart-npm和配置hexo</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/15/180415-nodejs-hexo/" class="archive-article-date">
+  	<time datetime="2018-04-15T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>用Mint软件源中安装的nodejs和npm可能是版本太低，试了各种方法总是无法成功运行hexo。于是想着升级一下版本，据说源码安装nodejs耗时特别久，而nvm是大家比较推荐的一款nodejs版本管理工具，可以在系统中安装管理多个不同版本的nodejs，挺好，就他了。利用nvm安装完nodejs后又发现通过npm命令安装需要的插件时，一直报错443,访问不到资源，于是又Google了一下，最后在nrm和smart-npm中选择了后者。</p>
+        
+          <a class="article-more-a" href="/2018/04/15/180415-nodejs-hexo/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">String</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/19/170919-heap-stack-string/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170918-java-bytecode" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/18/170918-java-bytecode/">【转载】Java字节码指令</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/18/170918-java-bytecode/" class="archive-article-date">
-  	<time datetime="2017-09-18T13:27:21.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>介绍java虚拟机的指令功能，至少能阅读java代码生成的字节码指令含义</p>
-<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>Java虚拟机采用基于栈的架构，其指令由操作码和操作数组成。</p>
-<ul>
-<li>操作码：一个字节长度(0~255)，意味着指令集的操作码个数不能操作256条。</li>
-<li>操作数：一条指令可以有零或者多个操作数，且操作数可以是1个或者多个字节。编译后的代码没有采用操作数长度对齐方式，比如16位无符号整数需使用两个字节储存(假设为byte1和byte2)，那么真实值是 <code>(byte1 &lt;&lt; 8) | byte2</code>。</li>
-</ul>
-<p>放弃操作数对齐操作数对齐方案：</p>
-<ul>
-<li>优势：可以省略很多填充和间隔符号，从而减少数据量，具有更高的传输效率；Java起初就是为了面向网络、智能家具而设计的，故更加注重传输效率。</li>
-<li>劣势：运行时从字节码里构建出具体数据结构，需要花费部分CPU时间，从而导致解释执行字节码会损失部分性能。</li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/09/18/170918-java-bytecode/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">bytecode</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">nodejs</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/18/170918-java-bytecode/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170918-javap" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/18/170918-javap/">javap 命令详解</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/18/170918-javap/" class="archive-article-date">
-  	<time datetime="2017-09-18T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-18</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>D:\temp&gt;javap -help<br>Usage: javap <options> <classes><br>where possible options include:</p>
-<p>| javap 参数 					| 含义 	|<br>|:-								|:-		|<br>|  -help  –help  -?        	|帮助|<br>|  -version                 		|版本|<br>|  -v  -verbose             	|打印附加信息（类常量池信息 字节码指令 等等很多…… 基本上需要的信息都会打印）|<br>|  -l                       		|输出行和变量的表|<br>|  -public                  		|只输出public方法和域|<br>|  -protected               	|只输出public和protected类和成员|<br>|  -package                 	|只输出包，public和protected类和成员，(这是默认的)|<br>|  -p  -private             	|输出所有类和成员|<br>|  -c                       		|输出反汇编后的代码（包含字节码指令）|<br>|  -s                       		|输出内部类型签名|<br>|  -sysinfo                 		|显示正在处理该类的系统信息(路径、大小、日期、MD5哈希)|<br>|  -constants               	|显示静态常量|<br>|  -classpath <path>		|指定类文件的路径|<br>|  -bootclasspath <path>|重写引导类文件的位置|</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ javap -c HelloWorld &gt; D://hw-log.txt	<span class="comment">#将输出的内容保存到文件</span></span><br></pre></td></tr></table></figure>
-<p><strong>一般常用的命令参数 <code>-c</code> 和 <code>-v</code>。</strong></p>
-<p>暂时就这些，后面没有了！(&#x3D;^ ^&#x3D;)</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javap</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/18/170918-javap/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170916-JSTL" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/17/170916-JSTL/">JSTL的版本还有aliyun maven的故事</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/17/170916-JSTL/" class="archive-article-date">
-  	<time datetime="2017-09-17T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-17</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一个比较曲折的故事~~，过程比较郁闷。<br>今天在项目中需要用到jstl，于是就上 <a target="_blank" rel="noopener" href="http://mvnrepository.com/">http://mvnrepository.com/</a> 搜索，一搜出来一大片，关于jstl的实现乱七八糟。</p>
-<p>一开始没有多想，就选择了第一个（其实这个版本对应的jar文件已经没了，但是我选择时没有仔细看，直接复制粘贴到项目中了），这就为我下来的错误埋下了伏笔。</p>
-<p><img src="/assets/blogImg/170916-jstl-1.png" alt="170916-jstl-1"></p>
-        
-          <a class="article-more-a" href="/2017/09/17/170916-JSTL/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">jstl</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/17/170916-JSTL/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170914-RestController-json-xml" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/14/170914-RestController-json-xml/">RestController返回json和xml数据</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/14/170914-RestController-json-xml/" class="archive-article-date">
-  	<time datetime="2017-09-14T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-14</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="实体类（POJO）"><a href="#实体类（POJO）" class="headerlink" title="实体类（POJO）"></a>实体类（POJO）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> org.code0.restController.model;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.xml.bind.annotation.XmlRootElement;</span><br><span class="line"><span class="comment">/**  </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Title</span>: Message.java</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Package</span> org.code0.restController.model</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@Description</span>: Message.java</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@author</span> Code0   </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@date</span> 2017年9月14日 上午11:15:16 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Message</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">private</span> String name;</span><br><span class="line">	</span><br><span class="line">	<span class="keyword">private</span> String text;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** <span class="doctag">@return</span> name */</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** <span class="doctag">@param</span> name 要设置的 name */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.name = name;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** <span class="doctag">@return</span> text */</span></span><br><span class="line">	<span class="keyword">public</span> String <span class="title function_">getText</span><span class="params">()</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> text;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** <span class="doctag">@param</span> text 要设置的 text */</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setText</span><span class="params">(String text)</span> &#123;</span><br><span class="line">		<span class="built_in">this</span>.text = text;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2017/09/14/170914-RestController-json-xml/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">springMVC</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/14/170914-RestController-json-xml/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170913-RESTful" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/13/170913-RESTful/">对RESTful的一些理解</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/13/170913-RESTful/" class="archive-article-date">
-  	<time datetime="2017-09-13T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-13</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="RESTful"><a href="#RESTful" class="headerlink" title="RESTful"></a>RESTful</h2><p>一种架构方式、编码风格。</p>
-<hr>
-<p>感觉RESTful模式的关注点在于“资源”，一切皆资源，客户端对服务端发出的所有请求皆是针对某个资源的请求。RESTful对资源的动作不会过分关注，因为针对所有资源的状态和动作都是统一的。</p>
-<p>比如：</p>
-<h3 id="RESTful-风格"><a href="#RESTful-风格" class="headerlink" title="RESTful 风格"></a>RESTful 风格</h3>
-        
-          <a class="article-more-a" href="/2017/09/13/170913-RESTful/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">RESTful</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/13/170913-RESTful/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170912-java-pojo-tostring" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/12/170912-java-pojo-tostring/">java POJO 重写toString方法工具</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/12/170912-java-pojo-tostring/" class="archive-article-date">
-  	<time datetime="2017-09-12T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="fastjson"><a href="#fastjson" class="headerlink" title="fastjson"></a>fastjson</h2><p>依赖：</p>
-<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- fastjson --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.38<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<p>使用：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> JSON.toJSONString(<span class="built_in">this</span>, <span class="keyword">new</span> <span class="title class_">SerializerFeature</span>[]&#123;</span><br><span class="line">			SerializerFeature.WriteMapNullValue, </span><br><span class="line">			SerializerFeature.WriteNullListAsEmpty,</span><br><span class="line">            SerializerFeature.WriteNullStringAsEmpty, </span><br><span class="line">            SerializerFeature.WriteNullNumberAsZero, </span><br><span class="line">            SerializerFeature.WriteNullBooleanAsFalse,</span><br><span class="line">            SerializerFeature.UseISO8601DateFormat&#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>忽略属性：<br>在属性上加注解 <code>@JSONField(serialize=false)  </code><br>SerializerFeature详解见 <a href="#%E9%99%84%E5%BD%95%EF%BC%9A">附录</a></p>
-        
-          <a class="article-more-a" href="/2017/09/12/170912-java-pojo-tostring/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">toString</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">nvm</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">java</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">smart-npm</a>
         		</li>
       		
 		</ul>
@@ -930,7 +938,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/12/170912-java-pojo-tostring/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/04/15/180415-nodejs-hexo/">展开全文 >></a>
         </p>
       
 
@@ -962,7 +970,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/4/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/6/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1053,11 +1061,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
+                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1070,10 +1082,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1117,15 +1125,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DevTools</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1161,22 +1169,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">String</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">English</a>
               </li>
              
@@ -1186,10 +1178,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">lombok</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1261,15 +1249,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1282,30 +1266,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Voovan</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1341,6 +1301,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tls</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ca</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -1353,7 +1321,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dockerfile</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">firewall</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">discuz</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">dns</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1361,7 +1361,107 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">helm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">innoSetup</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">java调用C#</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">k8s</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">chrony</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ntpdate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">lvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">nfs</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">vsftp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">String</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
               </li>
             
             <div class="clearfix"></div>

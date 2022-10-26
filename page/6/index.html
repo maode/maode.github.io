@@ -136,34 +136,628 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-170905-git-command" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-180415-youdao-dict" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-git-command/">Git常用命令</a>
+      <a class="article-title" href="/2018/04/15/180415-youdao-dict/">Mint下安装有道词典失败</a>
     </h1>
   
 
         
-        <a href="/2017/09/05/170905-git-command/" class="archive-article-date">
-  	<time datetime="2017-09-05T08:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
+        <a href="/2018/04/15/180415-youdao-dict/" class="archive-article-date">
+  	<time datetime="2018-04-15T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><ul>
-<li>告诉Github，你要使用的用户名<br><code>$ git config --global user.name &quot;Your Name Here&quot;</code></li>
-<li>设置邮箱<br><code>$ git config --global user.email &quot;your_email@example.com&quot;</code></li>
-<li>查看用户名和邮箱<br><code>$ git config user.name[user.email]</code></li>
-<li>查看所有配置项<br><code>$ git config -l[--list]</code></li>
-</ul>
+        <p>这其实是一篇转载，我只把标题改了一下。当时遇到问题时查了一些资料，这个作者的版本最简洁干练。</p>
+<p><strong>原文出处：</strong> <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/815c8a7a75c8">https://www.jianshu.com/p/815c8a7a75c8</a></p>
+<hr>
+<p>在Ubuntu16.04下安装有道词典发现因为一些依赖问题无法完成安装。通过尝试找到了解决方法。</p>
+<p>因为官方Ubuntu的deb包依赖gstreamer0.10-plugins-ugly，但是该软件在16.04里面没有了。其实没有该包，完全不影响有道词典的使用。所以我们可以去掉deb包里面对于该库的依赖。具体操作如下：</p>
+<p>从官方下载Ubuntu版本的deb包：<a target="_blank" rel="noopener" href="https://link.jianshu.com/?t=http://codown.youdao.com/cidian/linux/youdao-dict_1.1.0-0-ubuntu_amd64.deb">youdao-dict_1.1.0-0-ubuntu_amd64.deb</a></p>
+<p>创建youdao-dict目录，把该deb包解压到youdao-dict目录：</p>
+<pre><code>sudo dpkg -X ./youdao-dict_1.1.0-0-ubuntu_amd64.deb youdao-dict
+</code></pre>
+<p>解压deb包中的control信息（包的依赖就写在这个文件里面）：</p>
+<pre><code>sudo dpkg -e ./youdao-dict_1.1.0-0-ubuntu_amd64.deb youdao-dict/DEBIAN
+</code></pre>
+<p>编辑control文件，删除Depends里面的gstreamer0.10-plugins-ugly。</p>
+<pre><code>sudo vi ./youdao-dict/DEBIAN/control
+</code></pre>
+<p>重新打包：</p>
+<pre><code>sudo dpkg-deb -b youdao-dict youdaobuild.deb
+</code></pre>
+<p>安装重新打包的安装包</p>
+<p>已经安装gdebi包管理器，可以使用如下命令安装，自动解决依赖问题</p>
+<pre><code>sudo gdebi youdaobuild.deb
+</code></pre>
+<p>使用dpkg进行安装</p>
+<pre><code>sudo dpkg -i youdaobuild.deb
+出现缺少的依赖使用如下命令安装所需依赖
+sudo apt install -f
+依赖安装完成后再次键入如下命令进行安装
+sudo dpkg -i youdaobuild.deb
+</code></pre>
+<p>作者：LionelDong<br>链接：<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/815c8a7a75c8">https://www.jianshu.com/p/815c8a7a75c8</a><br>來源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">有道</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/15/180415-youdao-dict/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
         
-          <a class="article-more-a" href="/2017/09/05/170905-git-command/#more">more >></a>
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180401-SpringBoot+Swagger2" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/01/180401-SpringBoot+Swagger2/">【转】SpringBoot 使用Swagger2打造在线接口文档（附汉化教程）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/04/01/180401-SpringBoot+Swagger2/" class="archive-article-date">
+  	<time datetime="2018-04-01T12:02:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-01</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>序言：编写和维护接口文档是每个程序员的职责，根据Swagger2可以快速帮助我们编写最新的API接口文档，再也不用担心开会前仍忙于整理各种资料了，间接提升了团队开发的沟通效率。此外，本教程还额外提供了UI汉化教程，去除阅读官方英文界面的烦恼。（目前Swagger汉化教程是找不到的，因为官方手册实在写得太烂。。）</p>
+</blockquote>
+        
+          <a class="article-more-a" href="/2018/04/01/180401-SpringBoot+Swagger2/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Swagger</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/04/01/180401-SpringBoot+Swagger2/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180311-wait-notify" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/11/180311-wait-notify/">wait-notify 生产者-消费者示例(继承Thread和实现Runnable)</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/11/180311-wait-notify/" class="archive-article-date">
+  	<time datetime="2018-03-11T15:46:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>注意：</strong><br>通过继承Thread父类和通过实现Runnable接口实现线程操作，在线程的运行本质上没有什么区别，网上一些说 <strong>“与继承Thread相比，使用Runnable实现多线程可以达到资源共享目的” 是错的。他们用来证明的例子也是错的。大多数例子都是用继承Thread类的多个线程去操作了多个不同的资源，而用实现Runnable接口的多个线程去操作了相同的资源，然后拿两者的运行结果作比较，从而得出了上面错误的结论。</strong>，实际上以上两者都可以达到资源共享，也都可以资源不共享（而且都存在多种不同的实现方式），想要达到资源共享，只需把握住问题的核心 “想办法让多个线程操作的是同一个资源” 无论用哪种方式，只要遵循了这个核心原则，就都能达成资源共享的目的。</p>
+<h2 id="那-Thread-与-Runnable-有啥区别呢？"><a href="#那-Thread-与-Runnable-有啥区别呢？" class="headerlink" title="那 Thread 与 Runnable 有啥区别呢？"></a>那 Thread 与 Runnable 有啥区别呢？</h2><p>Thread本身继承自Runnable，是一个Runnable的具体实现，对Runnable进行了增强处理。所以Thread在功能上要比Runnable接口丰富。Thread提供了一系列 线程方法与属性跟踪，还可以跟踪线程堆栈及线程组与子线程的情况。<br>其次就是java本身的 “继承父类” 与 “实现接口” 之间的区别了。java只能单继承，但可以实现多个接口（java8开始，接口允许为方法提供“默认实现”了，也就是相当于可以实现多继承了）</p>
+        
+          <a class="article-more-a" href="/2018/03/11/180311-wait-notify/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Thread</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/11/180311-wait-notify/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180308-SpringBoot-application" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/03/08/180308-SpringBoot-application/">【转】Spring Boot配置文件的所有配置项</a>
+    </h1>
+  
+
+        
+        <a href="/2018/03/08/180308-SpringBoot-application/" class="archive-article-date">
+  	<time datetime="2018-03-08T13:02:31.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-03-08</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="http://blog.csdn.net/LPFSuperMan/article/details/78287265">http://blog.csdn.net/LPFSuperMan/article/details/78287265</a></p>
+<p>这个版本比较旧了，比较全的配置可以参照官方的介绍</p>
+<p><strong>官方文档：</strong> <a target="_blank" rel="noopener" href="https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html">https://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html</a></p>
+        
+          <a class="article-more-a" href="/2018/03/08/180308-SpringBoot-application/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">application.properties</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">SpringBoot</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/03/08/180308-SpringBoot-application/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180225-MongoDB-install" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/25/180225-MongoDB-install/">MongoDB安装配置</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/25/180225-MongoDB-install/" class="archive-article-date">
+  	<time datetime="2018-02-25T13:36:17.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>官网最新版（社区版）：<a target="_blank" rel="noopener" href="https://www.mongodb.com/download-center#community">https://www.mongodb.com/download-center#community</a></p>
+<h2 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h2><p>安装过程中选择  “Custom(自定义)” 可以自定义安装路径。</p>
+<p>安装时注意左下角的 “install mongo compass（安装指南）” 取消勾选。否则会卡住。无法完成安装（3.6版本的）</p>
+<h2 id="配置过程"><a href="#配置过程" class="headerlink" title="配置过程"></a>配置过程</h2><h3 id="创建数据和日志文件存放位置："><a href="#创建数据和日志文件存放位置：" class="headerlink" title="创建数据和日志文件存放位置："></a>创建数据和日志文件存放位置：</h3><p>如：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> D:\software\MongoDB\Server\<span class="number">3</span>.<span class="number">6</span>\data</span><br><span class="line"><span class="built_in">mkdir</span> D:\software\MongoDB\Server\<span class="number">3</span>.<span class="number">6</span>\logs</span><br></pre></td></tr></table></figure>
+<h3 id="启动MongoDB服务"><a href="#启动MongoDB服务" class="headerlink" title="启动MongoDB服务"></a>启动MongoDB服务</h3><p>在bin目录下执行以下命令（如果报错<a href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%89%A7%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%97%B6%E6%8A%A5%E9%94%99">看这里</a>）：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mongod.exe --dbpath &quot;D:\software\MongoDB\Server\<span class="number">3</span>.<span class="number">6</span>\data&quot;</span><br></pre></td></tr></table></figure>
+<p><code>--dbpath</code>指向刚才新建的数据库目录。如果不指定，默认会在C盘创建一个文件夹用来存放数据。<br>正常的话控制台会打印一大串信息，开头是启动的进程id，系统信息等等，最后一行是端口信息。如：<code>2018-02-25T22:05:23.019+0800 I NETWORK  [initandlisten] waiting for connections on port 27017</code>。</p>
+<h3 id="测试链接"><a href="#测试链接" class="headerlink" title="测试链接"></a>测试链接</h3><p>目前服务已经启动，处于等待链接状态，这时另外打开一个cmd命令窗口用来测试一下链接。<br>（记得如果没有配置环境变量的话，要切换到bin目录下去执行命令）<br>在新打开的cmd命令窗口执行命令 <code>mongo</code> 如果没问题的话，控制台会打印链接信息。如下：</p>
+        
+          <a class="article-more-a" href="/2018/02/25/180225-MongoDB-install/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">MongoDB</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Database</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/25/180225-MongoDB-install/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180221-nodejs-modules-Path" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/21/180221-nodejs-modules-Path/">nodejs安装的modules的环境变量配置</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/21/180221-nodejs-modules-Path/" class="archive-article-date">
+  	<time datetime="2018-02-21T03:29:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>昨天不小心把环境变量给覆写了，凭印象补充了一些，今天发现 nodejs下安装的所有module的 CLI命令 都失效了。寻思了好一会才想到应该怎么配置回来，记录一下。</p>
+<p>nodejs通过npm命令全局安装的所有 modules 的 CLI命令 默认应该全都是被注册到了<code>C:\Users\code0\AppData\Roaming\npm</code>这个目录中，把这个目录加到环境变量的<code>Path</code>中，所有的 CLI命令 就都复活了。</p>
+<p>暂时就这些，后面没有了！(&#x3D;^ ^&#x3D;)</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">nodejs</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">环境变量</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/21/180221-nodejs-modules-Path/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180220-gradle-install" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/20/180220-gradle-install/">gradle安装配置</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/20/180220-gradle-install/" class="archive-article-date">
+  	<time datetime="2018-02-20T08:18:59.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-20</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><p>官网下载压缩包解压安装：<a target="_blank" rel="noopener" href="https://gradle.org/releases/">https://gradle.org/releases/</a></p>
+<p>其它安装方式见：<a target="_blank" rel="noopener" href="https://gradle.org/install/">https://gradle.org/install/</a></p>
+<h3 id="配置环境变量："><a href="#配置环境变量：" class="headerlink" title="配置环境变量："></a>配置环境变量：</h3><ul>
+<li>在环境变量中添加一个变量<code>GRADLE_HOME</code>指向gradle的根目录。<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setx GRADLE_HOME &quot;C:\software\gradle-<span class="number">4</span>.<span class="number">5</span>.<span class="number">1</span>&quot;</span><br></pre></td></tr></table></figure></li>
+<li>将gradle的可执行文件路径追加至Path。<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setx <span class="built_in">Path</span> &quot;<span class="variable">%Path%</span>;<span class="variable">%GRADLE_HOME%</span>\bin&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="自定义gradle本地仓库"><a href="#自定义gradle本地仓库" class="headerlink" title="自定义gradle本地仓库"></a>自定义gradle本地仓库</h3><p>有几种不同的方式，大多采用配置环境变量的方式。<br>设置一个名称为<code>GRADLE_USER_HOME</code>的环境变量指向自定义的仓库目录。</p>
+        
+          <a class="article-more-a" href="/2018/02/20/180220-gradle-install/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">gradle</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/02/20/180220-gradle-install/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-180219-Git-sparsecheckout" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/19/180219-Git-sparsecheckout/">【转】Git只获取部分目录的内容（稀疏检出）</a>
+    </h1>
+  
+
+        
+        <a href="/2018/02/19/180219-Git-sparsecheckout/" class="archive-article-date">
+  	<time datetime="2018-02-19T13:28:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="https://zhgcao.github.io/2016/05/11/git-sparse-checkout/">Git只获取部分目录的内容（稀疏检出）</a></p>
+<hr>
+<p>公司的开发从SVN切换到Git，在SVN下，可以很方便的只获取版本库中一个或多个目录的内容，但是Git的克隆，默认是直接拉取整个远程仓库，如果项目比较大，大量和自己无关的内容也会拉到本地，占用很多硬盘空间。</p>
+<p>在网上搜了一下，Git在1.7版本后，已经支持只Checkout部分内容，这个功能叫做 sparse checkout（稀疏检出）。</p>
+<h3 id="打开-sparse-checkout-功能"><a href="#打开-sparse-checkout-功能" class="headerlink" title="打开 sparse checkout 功能"></a>打开 sparse checkout 功能</h3><p>如果本地还没有建版本库，要用这个功能，先进入要放版本库的目录，在命令行执行几条命令：</p>
+        
+          <a class="article-more-a" href="/2018/02/19/180219-Git-sparsecheckout/#more">more >></a>
         
       
 
@@ -187,7 +781,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-git-command/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/02/19/180219-Git-sparsecheckout/">展开全文 >></a>
         </p>
       
 
@@ -217,106 +811,33 @@
 
 
   
-    <article id="post-170905-aliyun-maven" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-180219-Spring-cache" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-aliyun-maven/">aliyun maven仓库</a>
+      <a class="article-title" href="/2018/02/19/180219-Spring-cache/">缓存以及Spring cache介绍</a>
     </h1>
   
 
         
-        <a href="/2017/09/05/170905-aliyun-maven/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
+        <a href="/2018/02/19/180219-Spring-cache/" class="archive-article-date">
+  	<time datetime="2018-02-19T11:46:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-19</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- aliyun maven镜像</span></span><br><span class="line"><span class="comment">	放在.m2文件夹下 settings.xml下</span></span><br><span class="line"><span class="comment">--&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">mirror</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">id</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">id</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun<span class="tag">&lt;/<span class="name">name</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;/<span class="name">mirror</span>&gt;</span>  </span><br></pre></td></tr></table></figure>
-<p>暂时就这些，后面没有了！(&#x3D;^ ^&#x3D;)</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">maven</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-aliyun-maven/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
+        <h2 id="缓存简介"><a href="#缓存简介" class="headerlink" title="缓存简介"></a>缓存简介</h2><p>缓存，我的理解是：让数据更接近于使用者；工作机制是：先从缓存中读取数据，如果没有再从慢速设备上读取实际数据（数据也会存入缓存）；缓存什么：那些经常读取且不经常修改的数据&#x2F;那些昂贵（CPU&#x2F;IO）的且对于相同的请求有相同的计算结果的数据。如CPU–L1&#x2F;L2–内存–磁盘就是一个典型的例子，CPU需要数据时先从L1&#x2F;L2中读取，如果没有到内存中找，如果还没有会到磁盘上找。还有如用过Maven的朋友都应该知道，我们找依赖的时候，先从本机仓库找，再从本地服务器仓库找，最后到远程仓库服务器找；还有如京东的物流为什么那么快？他们在各个地都有分仓库，如果该仓库有货物那么送货的速度是非常快的。</p>
+<h2 id="缓存命中率"><a href="#缓存命中率" class="headerlink" title="缓存命中率"></a>缓存命中率</h2><p>即从缓存中读取数据的次数 与 总读取次数的比率，命中率越高越好：</p>
+<p>命中率 &#x3D; 从缓存中读取次数 &#x2F; (总读取次数[从缓存中读取次数 + 从慢速设备上读取的次数])</p>
+<p>Miss率 &#x3D; 没有从缓存中读取的次数 &#x2F; (总读取次数[从缓存中读取次数 + 从慢速设备上读取的次数])</p>
+<p>这是一个非常重要的监控指标，如果做缓存一定要健康这个指标来看缓存是否工作良好；</p>
         
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170905-github-domain-name" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-github-domain-name/">Github映射自定义域名</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/05/170905-github-domain-name/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>向你的 Github Pages 仓库添加一个CNAME文件(文件名一定要<strong>大写</strong>)。<br>文件中只能包含一个顶级域名，像这样<code>example.com</code>。<br>如果你是用 hexo 框架搭建博客并部署到 Github Pages 上，每次执行生成命令<code>$ hexo g</code>和部署命令<code>$ hexo d</code>后，会将博客所在目录下 public 文件夹里的东西都推到 Github Pages 仓库上，并且把 CNAME 文件覆盖掉，解决这个问题可以直接把 CNAME 文件添加到 source 文件夹里，这样每次推的时候就不用担心仓库里的 CNAME 文件被覆盖掉了。</li>
-</ol>
-        
-          <a class="article-more-a" href="/2017/09/05/170905-github-domain-name/#more">more >></a>
+          <a class="article-more-a" href="/2018/02/19/180219-Spring-cache/#more">more >></a>
         
       
 
@@ -330,246 +851,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">GitHub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-github-domain-name/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170905-GitHub-link-error" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-GitHub-link-error/">GitHub配置完后链接不上，报错</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/05/170905-GitHub-link-error/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>安装配置完Git后链接不上GitHub。<br>用<code>ssh -T git@github.com</code>命令测试连接时,报错<code>“ssh: connect to host github.com port 22: Connection timed out”</code></p>
-<p>解决方法:</p>
-        
-          <a class="article-more-a" href="/2017/09/05/170905-GitHub-link-error/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">GitHub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-GitHub-link-error/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170905-IPC-minicomputer-PC" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-IPC-minicomputer-PC/">工控机、PC机、PC服务器、小型机的区别</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/05/170905-IPC-minicomputer-PC/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="什么是工控机"><a href="#什么是工控机" class="headerlink" title="什么是工控机"></a>什么是工控机</h3><p>英文简称IPC，全称Industrial Personal Computer。工控机通俗的说就是专门为工业现场而设计的计算机。 工控机有以下特点：1：机箱采用钢结构，有较高的防磁、防尘、防冲击的能力。2：机箱内有专用底版，底版上有更多的PCI插槽（可以插很多语音卡)。3：机箱内有专门电源，电源有较强的抗干扰能力。4:可以24小时开机，一般很少重启动。</p>
-<h3 id="什么是PC机"><a href="#什么是PC机" class="headerlink" title="什么是PC机"></a>什么是PC机</h3><p>PC，personal computer，个人电脑的意思，就是我们家用的电脑或一般电子市场买到的台式机或笔记本，一般使用windows操作系统。</p>
-<h3 id="什么是PC服务器"><a href="#什么是PC服务器" class="headerlink" title="什么是PC服务器"></a>什么是PC服务器</h3><p>PC服务器是PC概念与服务器概念相结合的新产物。其实，PC服务器与PC一样，也是基于intel+windows的产品，是通用的开放体系结构，但PC是专为提高单用户个人电脑数据计算能力与信息处理效率而设计制造的产品。与PC相比，PC服务器的软硬件都是用于优化和管理服务器的专用产品，除了在保证应有速度和性能的前提下的高扩充性、高可用性、高稳定性，以及独有的容错能力如何raid5阵列和冗余结构区别PC之外，还在磁盘空间、监测功能、工具软件和管理软件等方面与PC有较大区别。</p>
-<h3 id="什么是小型机"><a href="#什么是小型机" class="headerlink" title="什么是小型机"></a>什么是小型机</h3><p>小型机一般是装了unix操作系统的小型机，如果ibm公司的aix,hp公司的hp Unix,sun公司的solaris。小型机是多用户，多任务的高性能计算机，一般使用在银行、电信等高端客户企业中，而且价格不菲，至少上百万。</p>
-<p><strong>摘自：</strong> <a target="_blank" rel="noopener" href="http://www.it9000.cn/products/cc-server.html">http://www.it9000.cn/products/cc-server.html</a></p>
-<p>（完）</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">工控机</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-IPC-minicomputer-PC/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170905-ssh-github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-ssh-github/">windows和Linux下通过SSH链接GitHub</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/05/170905-ssh-github/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>下载安装一款git工具，如 <a target="_blank" rel="noopener" href="https://git-for-windows.github.io/">git for windows</a></p>
-<p>打开 GitBash 命令窗口开始配置</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;要设置的用户名&quot;</span>	<span class="comment">#配置GitHub的name</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;要设置的邮箱&quot;</span>	<span class="comment">#配置GitHub的email</span></span><br></pre></td></tr></table></figure>
-<p>进入到当前登录用户的目录下<br><code>$ cd ~</code><br>查看当前用户目录下是否存在<code>.ssh</code>文件夹，若不存在，则创建一个<br><code>$ mkdir .ssh</code></p>
-        
-          <a class="article-more-a" href="/2017/09/05/170905-ssh-github/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">GitHub</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">cache</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">SSH</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">缓存</a>
         		</li>
       		
 		</ul>
@@ -579,7 +865,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-ssh-github/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/02/19/180219-Spring-cache/">展开全文 >></a>
         </p>
       
 
@@ -609,44 +895,39 @@
 
 
   
-    <article id="post-170905-maven-command" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-180218-BAT-tutorial" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/05/170905-maven-command/">maven常用命令和参数</a>
+      <a class="article-title" href="/2018/02/18/180218-BAT-tutorial/">【转】BAT批处理脚本教程</a>
     </h1>
   
 
         
-        <a href="/2017/09/05/170905-maven-command/" class="archive-article-date">
-  	<time datetime="2017-09-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-05</time>
+        <a href="/2018/02/18/180218-BAT-tutorial/" class="archive-article-date">
+  	<time datetime="2018-02-18T10:36:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-02-18</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="打包-package"><a href="#打包-package" class="headerlink" title="打包 package"></a>打包 package</h3><ul>
-<li><code>mvn clean package -Dmaven.test.skip=true</code><br>将项目先clean然后编译并打包，（会在模块下的target目录生成jar或war等文件）。<br><strong>clean</strong> 表示清空项目生成的编译文件,一般是模块下的target目录。<br><strong>-Dmaven.test.skip&#x3D;true</strong> 表示打包时忽略掉test目录。</li>
-<li><code>mvn war:exploded</code><br>仅打包Web页面文件。</li>
-</ul>
-<h3 id="编译-compile"><a href="#编译-compile" class="headerlink" title="编译 compile"></a>编译 compile</h3><ul>
-<li><p><code>mvn compile</code><br>编译项目主程序。<strong>不会编译test目录的代码</strong>。第一次运行时，会下载相关的依赖包，编译后的class生成在<code>target/classes</code>目录下。</p>
-</li>
-<li><p><code>mvn test-compile</code><br>编译项目的测试代码。<strong>编译单元测试类代码</strong>编译后的class生成在<code>target/test-classes</code>目录下。</p>
-</li>
-</ul>
-<h3 id="运行-run"><a href="#运行-run" class="headerlink" title="运行 run"></a>运行 run</h3><ul>
-<li><code>mvn test</code><br>运行项目中的单元测试类（先编译后运行）。</li>
-<li><code>mvn test -skipping compile -skipping test-compile</code><br>运行项目中的单元测试类（不编译主程序，也不编译单元测试类）。</li>
-<li><code>mvn jetty:run</code><br>用jetty服务器运行 （依赖于jetty且只适用于war的模块,即web模块）。</li>
-<li><code>mvn spring-boot:run</code><br>运行spring boot项目（在spring boot项目的根路径下运行）。</li>
-</ul>
+        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="http://xiangkg.blog.163.com/blog">http://xiangkg.blog.163.com/blog</a></p>
+<p><a href="#%E5%89%8D%E8%A8%80">前言</a></p>
+<h2 id="第一章-批处理基础"><a href="#第一章-批处理基础" class="headerlink" title="第一章 批处理基础"></a>第一章 批处理基础</h2><p>批处理定义：顾名思义，批处理文件是将一系列命令按一定的顺序集合为一个可执行的文本文件，其扩展名为BAT或者CMD。这些命令统称批处理命令。</p>
+<p>小知识：可以在键盘上按下Ctrl+C组合键来强行终止一个批处理的执行过程。</p>
+<p>了解了大概意思后,我们正式开始学习.先看一个简单的例子!</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">echo</span> &quot;欢迎来到非常BAT!&quot;</span><br><span class="line"><span class="built_in">pause</span></span><br></pre></td></tr></table></figure>
+<p>把上面的3条命令保存为文件test.bat或者test.cmd然后执行,<br>他就会在屏幕上显示以下二行话</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">欢迎来到非常BAT!</span><br><span class="line">请按任意键继续. . .</span><br></pre></td></tr></table></figure>
+<p>这就是一个简单批处理文件了，这个批处理文件一共就用了2条命令 “echo” 和”pause” 还有一个特殊符号”@”</p>
+<p>从上面这个简单的批处理中,我们可以发现其实批处理就是运用一些含有特殊意义的符号和一些完成指定功能的命令组合而成,那么在批处理中有多少这样的特殊符号和功能命令呢？我们现在就来仔细了解一下一些最常用的!</p>
+<p>(以下内容来源网络,请各位仔细阅读,好进入下节的实例说明)</p>
         
-          <a class="article-more-a" href="/2017/09/05/170905-maven-command/#more">more >></a>
+          <a class="article-more-a" href="/2018/02/18/180218-BAT-tutorial/#more">more >></a>
         
       
 
@@ -660,174 +941,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">maven</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/05/170905-maven-command/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170903-hexo-blog-course" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/03/170903-hexo-blog-course/">hexo搭建GitHub博客过程</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/03/170903-hexo-blog-course/" class="archive-article-date">
-  	<time datetime="2017-09-03T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><p><strong>nodejs，git</strong></p>
-<ul>
-<li>安装nodejs：<a target="_blank" rel="noopener" href="https://nodejs.org/">nodejs官网</a></li>
-<li>安装git：<a target="_blank" rel="noopener" href="https://git-for-windows.github.io/">git for windows</a></li>
-</ul>
-        
-          <a class="article-more-a" href="/2017/09/03/170903-hexo-blog-course/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">BAT</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">GitHub</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/03/170903-hexo-blog-course/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-170905-eclipse-github" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/02/170905-eclipse-github/">Eclipse与GitHub之间的操作</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/02/170905-eclipse-github/" class="archive-article-date">
-  	<time datetime="2017-09-02T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Eclipse生SSH-Key添加到GitHub"><a href="#Eclipse生SSH-Key添加到GitHub" class="headerlink" title="Eclipse生SSH Key添加到GitHub"></a>Eclipse生SSH Key添加到GitHub</h2><p>window → preference → general → network connection → SSH2 → Key Management → generate RSA Key… → ave private key…【默认保存在“~&#x2F;.ssh&#x2F;”目录下】→apply.</p>
-<p>点击Export Via SFTP,在弹出窗口填入 <code>git@github.com</code>，然后会在ssh目录中生成一个<code>known_hosts</code>文件，该文件用来保存当前密钥对应的已知远程主机列表，如果没有该文件会报错。连不上Github。<br>若出现： <code>Failed to export ssh key to remote server</code> 的警告，不需理会。</p>
-<p>然后复制中间文本域中的公钥到GitHub就可以了。</p>
-<p>关于<code>known_hosts</code>文件的说明可以参考该文章：<a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2011/12/ssh_remote_login.html">SSH原理与运用</a></p>
-        
-          <a class="article-more-a" href="/2017/09/02/170905-eclipse-github/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">GitHub</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">批处理</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">Eclipse</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">CMD</a>
         		</li>
       		
 		</ul>
@@ -837,100 +959,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/02/170905-eclipse-github/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-A-empty-temp-yuwi" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/09/02/A-empty-temp-yuwi/">Yu Writer 编辑器下的空白模板</a>
-    </h1>
-  
-
-        
-        <a href="/2017/09/02/A-empty-temp-yuwi/" class="archive-article-date">
-  	<time datetime="2017-09-02T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-09-02</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>转自：</strong><br><strong>摘自：</strong> </p>
-<p>这是自定义的Yu Writer 编辑器下的空白模板。</p>
-<table>
-<thead>
-<tr>
-<th align="center">标题1</th>
-<th align="center">标题2</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center">内容1</td>
-<td align="center">内容2</td>
-</tr>
-</tbody></table>
-<p><img src="/assets/blogImg/xxx.png" alt="图片"></p>
-<p>参考资料的等级：	★☆</p>
-<p>脚注：	①②③④⑤⑥⑦⑧⑨⑩	↩</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p>（完）</p>
-        
-          <a class="article-more-a" href="/2017/09/02/A-empty-temp-yuwi/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">temp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/09/02/A-empty-temp-yuwi/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/02/18/180218-BAT-tutorial/">展开全文 >></a>
         </p>
       
 
@@ -962,7 +991,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span>
+      <a class="extend prev" rel="prev" href="/page/5/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><span class="page-number current">6</span><a class="page-number" href="/page/7/">7</a><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/7/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1053,11 +1082,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
+                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1070,10 +1103,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1117,15 +1146,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DevTools</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1161,22 +1190,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">String</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">English</a>
               </li>
              
@@ -1186,10 +1199,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">lombok</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1261,15 +1270,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1282,30 +1287,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Voovan</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1341,6 +1322,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tls</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ca</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -1353,7 +1342,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dockerfile</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">firewall</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">discuz</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">dns</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1361,7 +1382,107 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">helm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">innoSetup</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">java调用C#</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">k8s</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">chrony</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ntpdate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">lvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">nfs</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">vsftp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">String</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
               </li>
             
             <div class="clearfix"></div>

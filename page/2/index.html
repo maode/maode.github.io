@@ -136,215 +136,92 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-181003-kafka" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-211119-k8s-install-harbor" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/03/181003-kafka/">kafka常用操作</a>
+      <a class="article-title" href="/2022/10/26/211119-k8s-install-harbor/">k8s集群安装harbor</a>
     </h1>
   
 
         
-        <a href="/2018/10/03/181003-kafka/" class="archive-article-date">
-  	<time datetime="2018-10-03T13:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
+        <a href="/2022/10/26/211119-k8s-install-harbor/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:38:02.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h4 id="下载Kafka"><a href="#下载Kafka" class="headerlink" title="下载Kafka"></a>下载Kafka</h4><p>从Kafka官网下载最新的Kafka，目前我下载的版本为kafka_2.12-2.0.0.tgz</p>
-<h4 id="解压Kafka"><a href="#解压Kafka" class="headerlink" title="解压Kafka"></a>解压Kafka</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ tar -zxvf kafka_2.12-2.0.0.tgz</span><br></pre></td></tr></table></figure>
-<h4 id="修改Zookeeper服务器配置"><a href="#修改Zookeeper服务器配置" class="headerlink" title="修改Zookeeper服务器配置"></a>修改Zookeeper服务器配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ cd kafka_2.12-2.0.0</span><br><span class="line">$ vi config/zookeeper.properties  </span><br></pre></td></tr></table></figure>
-<p>通过以上命令打开<code>zookeeper.properties </code>并进行相应配置：</p>
-<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#修改ZooKeeper的数据目录</span></span><br><span class="line"><span class="attr">dataDir</span>=/usr/local/db/zookeeper </span><br><span class="line"><span class="comment">#配置host.name和advertised.host.name为IP地址，防止通过Java客户端连接时解析为localhost</span></span><br><span class="line"><span class="attr">host.name</span>=<span class="number">192.168</span>.<span class="number">209.121</span> </span><br><span class="line"><span class="attr">advertised.host.name</span>=<span class="number">192.168</span>.<span class="number">209.121</span></span><br></pre></td></tr></table></figure>
-<h4 id="启动Zookeeper服务器"><a href="#启动Zookeeper服务器" class="headerlink" title="启动Zookeeper服务器"></a>启动Zookeeper服务器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./zookeeper-server-start.sh /usr/local/kafka_2.12-2.0.0/config/zookeeper.properties</span><br></pre></td></tr></table></figure>
-<h4 id="后台启动Zookeeper"><a href="#后台启动Zookeeper" class="headerlink" title="后台启动Zookeeper"></a>后台启动Zookeeper</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./zookeeper-server-start.sh  -daemon /usr/local/kafka_2.12-2.0.0/config/zookeeper.properties</span><br></pre></td></tr></table></figure>
-<p>（或使用<code>nohup</code>方式）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nohup /bin/sh ./zookeeper-server-start.sh /usr/local/kafka_2.12-2.0.0/config/zookeeper.properties 2&gt;&amp;1 &gt; /dev/null &amp;</span><br></pre></td></tr></table></figure>
-<h4 id="修改Kafka配置"><a href="#修改Kafka配置" class="headerlink" title="修改Kafka配置"></a>修改Kafka配置</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ vi config/server.properties  </span><br></pre></td></tr></table></figure>
-<p>通过以上命令打开<code>server.properties</code>并进行相应配置：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">log.dirs=/usr/local/kafka/kafka-logs </span><br></pre></td></tr></table></figure>
-<h4 id="启动Kafka服务器"><a href="#启动Kafka服务器" class="headerlink" title="启动Kafka服务器"></a>启动Kafka服务器</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./kafka-server-start.sh /usr/local/kafka_2.12-2.0.0/config/server.properties</span><br></pre></td></tr></table></figure>
-<h4 id="后台启动Kafka"><a href="#后台启动Kafka" class="headerlink" title="后台启动Kafka"></a>后台启动Kafka</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./kafka-server-start.sh  -daemon /usr/local/kafka_2.12-2.0.0/config/server.properties</span><br></pre></td></tr></table></figure>
-<p>（或使用<code>nohup</code>方式）</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nohup /bin/sh ./kafka-server-start.sh /usr/local/kafka_2.12-2.0.0/config/server.properties 2&gt;&amp;1 &gt; /dev/null &amp;</span><br></pre></td></tr></table></figure>
-        
-          <a class="article-more-a" href="/2018/10/03/181003-kafka/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">kafka</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/03/181003-kafka/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-181003-netty-tio-Voovan" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/03/181003-netty-tio-Voovan/">【转】Netty、t-io、Voovan 框架浅谈</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/03/181003-netty-tio-Voovan/" class="archive-article-date">
-  	<time datetime="2018-10-03T13:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="https://my.oschina.net/helyho/blog/919465?p=5">https://my.oschina.net/helyho/blog/919465?p=5</a></p>
-<p><strong>声明:</strong> 欢迎本着技术讨论为主的讨论者一起探讨。让我们一起共同维护好技术圈的和谐氛围。以下内容均为个人理解，如果不妥的地方请大家指出。如果发现错字，只能麻烦你暂时脑补一下。</p>
-<p>我作为 Voovan 的设计及主创人员，针对目前流行的几款框架在设计和功能方面做一个分析，分析的内容我选取了一些我个人比较关注的性能和开发的便利性有影响的点，当然一定会不够全面的，就像大家关注的点总是不同的，有人喜欢大长腿，有人喜欢大XX。这篇文章中不涉及性能的好坏评价(因为没有对三个框架做全面的横向评测)，也不做框架设计优劣的评论，存在及合理。</p>
-<p>首先目的是要在熟悉和了解其他框架的过程中，学习他们好的设计思想和编码技巧，这里我不做结论性的陈述。目的是在于帮助开发者更好的选择适合自己的框架。</p>
-<p>在编写这篇文章时与 t-io 的作者进行了沟通，当然就我们两个人的理解也极有可能有错误的地方，欢迎大家指出错误，我们会尽快修复的。</p>
-<p><strong>以下是我对三个框架在设计或者说是编码特点中选取的几个我比较关注的点的对比图:</strong></p>
-<p><img src="/assets/blogImg/181003-netty-tio-Voovan.png" alt="图片"></p>
-<p><strong>首先我们对几个关键的概念进行一些解析，方便大家更好的理解上面表中的概念：</strong></p>
+        <h1 id="安装-helm"><a href="#安装-helm" class="headerlink" title="安装 helm"></a>安装 helm</h1><p>在k8s中最简单的方式是使用 helm 进行安装，所以先安装好 helm 此处略过 helm 安装步骤，假设已经安装好了。   </p>
+<h1 id="安装发布"><a href="#安装发布" class="headerlink" title="安装发布"></a>安装发布</h1><ol>
+<li><p>通过 harbor-helm 仓库在线安装（网络好的情况下用这个方法）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加 harbor-helm 仓库</span></span><br><span class="line">helm repo add harbor https://helm.goharbor.io</span><br><span class="line"><span class="comment">#debug 试安装一下（如果很熟练了，可略过该步骤）</span></span><br><span class="line">helm install my-release harbor/harbor</span><br><span class="line">helm install --debug --dry-run   发布名 -f 自定义配置文件  --namespace 发布到哪个命名空间 harbor/harbor |sed <span class="string">&#x27;w ./发布内容写入到某文件.yaml&#x27;</span></span><br><span class="line"><span class="comment">#正式安装发布（发布到 inner-harbor 命令空间，发布名为 harbor ，使用 value-custom.yaml 配置文件，将发布结果写入 ./deploy.yaml 文件）</span></span><br><span class="line">helm install harbor -f values-custom.yaml  --namespace inner-harbor harbor/harbor |sed <span class="string">&#x27;w ./deploy.yaml&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>因为要去下载镜像和chart包，所以要等很长时间。</p>
+</li>
+<li><p>手动下载镜像包和chart包安装（网络不好的情况下用这个方法）</p>
+</li>
+</ol>
 <ul>
-<li><strong>NIO、AIO 的区别？</strong></li>
+<li><p>访问 harbor-helm 的 <a target="_blank" rel="noopener" href="https://github.com/goharbor/harbor-helm/releases">Release</a> 页面，下载最新的发布包，同时记住该发布包对应的镜像版本（Harbor OSS version）。</p>
+</li>
+<li><p>访问 harbor 的 <a target="_blank" rel="noopener" href="https://github.com/goharbor/harbor/releases">Release</a> 页面，根据刚才 harbor-helm 的 Release 下载界面标注的 Harbor OSS version 下载对应版本的 harbor 离线镜像安装包。</p>
+</li>
+<li><p>将 harbor 的离线安装包上传到所有的 k8s work 节点。然后解压获得镜像离线压缩包。然后使用<code>load</code>命令加载镜像。如：<code>docker load -i harbor.v2.0.4.tar.gz</code>。</p>
+</li>
+<li><p>把 harbor-helm 压缩包上传到 k8s的master节点，并解压。比如解压后的目录为<code>/root/harbor-helm-1.4.4</code> 。</p>
+</li>
+<li><p>进入解压后的目录，根据 <code>values.yaml</code> 文件创建自定义配置文件 <code>values-custom.yaml</code> ，或者找找以前的复制过来一份。主要关心的参数如下：       </p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>expose.ingress.hosts.core</code></td>
+<td>harbor的访问域名，根据情况进行修改。</td>
+</tr>
+<tr>
+<td><code>expose.ingress.hosts.notary</code></td>
+<td>harbor notary的访问域名，根据情况进行修改。</td>
+</tr>
+<tr>
+<td><code>expose.ingress.annotations</code></td>
+<td>新增<code>nginx.org/client-max-body-size: &#39;0&#39;</code> 不限制上传大小，默认的那两个<code>proxy-body-size</code>选项不好使。</td>
+</tr>
+<tr>
+<td><code>externalURL</code></td>
+<td>外部访问URL，如果在代理后面部署 Harbor，请将其设置为代理的 URL。否则和 <code>expose.ingress.hosts.core</code>保持一致。</td>
+</tr>
+<tr>
+<td><code>persistence.persistentVolumeClaim</code></td>
+<td>persistence.persistentVolumeClaim下面所有服务的<code>storageClass</code>修改为自己的storageClass。（可以提前在kuboard中创建好，或者使用其他方式创建好）</td>
+</tr>
+</tbody></table>
+<p>自定义配置文件创建好，就可以安装发布了。更多配置参考：<a target="_blank" rel="noopener" href="https://github.com/goharbor/harbor-helm#configuration">https://github.com/goharbor/harbor-helm#configuration</a></p>
+</li>
+<li><p>安装命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">   <span class="comment"># 进入 harbor-helm 的解压目录。</span></span><br><span class="line">   <span class="built_in">cd</span> /root/harbor-helm-1.4.4</span><br><span class="line">   <span class="comment"># 目录结构如下</span></span><br><span class="line">    cert  Chart.yaml  conf  CONTRIBUTING.md  deploy.yaml  docs  LICENSE  README.md  templates  <span class="built_in">test</span>  values.yaml  values-custom.yaml</span><br><span class="line">   <span class="comment"># 根据具体的情况编辑好自定义配置文件，后执行以下命令安装发布。命令具体含义和上面在线安装的一个意思，只是把`chart包名`替换成了`.`用来表示当前目录，如果放在其他目录，请写全路径。（如果指定命名空间，请提前创建好）</span></span><br><span class="line">   <span class="comment"># 试安装</span></span><br><span class="line">   helm install --debug --dry-run   harbor -f values-custom.yaml  --namespace inner-harbor . |sed <span class="string">&#x27;w ./deploy.yaml&#x27;</span></span><br><span class="line">   <span class="comment">#正式安装发布</span></span><br><span class="line">   helm install harbor -f values-custom.yaml  --namespace inner-harbor . |sed <span class="string">&#x27;w ./deploy.yaml&#x27;</span></span><br><span class="line">   ```   </span><br><span class="line"><span class="comment"># 访问和上传拉取镜像</span></span><br><span class="line"></span><br><span class="line">打开浏览器，通过配置文件中配置的`expose.ingress.hosts.core` 域名，进行访问。默认用户名：admin 密码：Harbor12345（如果是内网域名，注意内网dns的设置）</span><br><span class="line"></span><br><span class="line">镜像上传和下载：</span><br><span class="line">1. 首先在需要上传或下载镜像的主机配置ca证书。ca证书有以下几种方式可以获取。任选一种即可。</span><br><span class="line"> - 通`kubectl`命令获取</span><br><span class="line">   ```bash</span><br><span class="line">   <span class="comment"># 以yaml文件的形式展示harbor-ingress的详情信息，其中控制台打印的data部分的ca.crt就是证书相关信息</span></span><br><span class="line">   kubectl get secret harbor-harbor-ingress -n inner-harbor -o yaml</span><br><span class="line">   <span class="comment"># 获取ca证书信息，并使用base64解码后保存到当前目录的 ca.crt 文件中</span></span><br><span class="line">   kubectl get secret harbor-harbor-ingress -n inner-harbor -o jsonpath=<span class="string">&quot;&#123;.data.ca\.crt&#125;&quot;</span>|<span class="built_in">base64</span> --decode|sed <span class="string">&#x27;w ca.crt&#x27;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>通过harbor web界面获取<br>用浏览器访问harbor的web管理界面，进入系统管理-》配置管理-》镜像库根证书。点击下载即可。</p>
+</li>
 </ul>
-<p>在这里我们来看一下两者最明显的区别，NIO 是由 JDK 来处理异步事件的，就是说由 JDK 来探测系统缓冲区及Socket 的连接状态并通知用户事件被触发，最明显的就是编写 NIO 的时候我们需要对 Selector 进行处理,然后自己对事件进行处理,那么这个时候如果不使用线程来处理的话,就是一个同步的通信模型。而 AIO 这是由 JDK 所在的操作系统通知 JDK 事件被触发，这是基于 Linux 的 Epoll 或者 window 的 Iocp 来完成，且事件在被触发时就是在一个独立的线程中处理的。 理论上 AIO 的性能更好，如果传言是真的不知道为什么 Netty 的作者停止了对 Netty5 AIO 版本的维护。</p>
-        
-          <a class="article-more-a" href="/2018/10/03/181003-netty-tio-Voovan/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Netty</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tio</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">Voovan</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/03/181003-netty-tio-Voovan/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-181003-netty" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/03/181003-netty/">Netty知识点记录</a>
-    </h1>
-  
-
-        
-        <a href="/2018/10/03/181003-netty/" class="archive-article-date">
-  	<time datetime="2018-10-03T13:23:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>解码器:<br>在进入decode方法处理完业务逻辑后,如果当前缓冲区所有数据已经读完(ridx&#x3D;widx),会自动释放当前信道字节缓冲区中已读取的部分.</p>
-<p>和write有关的方法:<br>write和writeAndFlush调用底层AbstractChannel的内部类AbstractUnsafe的write方法.<br>在该方法中会调用filterOutboundMessage方法对write的数据进行类型判断,只有ByteBuf类型<br>和FileRegion类型的才认为是有效数据,并将改数据返回.否则抛出一个异常(UnsupportedOperationException).<br>如果是数据类型正确,返回了数据,那么会将数据加入outboundBuffer,(当调用flush时会冲刷outboundBuffer将数据写出).<br>如果数据类型不正确,抛出了异常,那么会将数据释放(release)并return;</p>
-<p>同一个Bytebuf对象不能被write多次,因为在调用write时outboundBuffer保存该对象的引用,等到调用flush时,每当成功写出一个对象,都会释放该对象,如果一个对象被write了多次,那么flush时,该对象第一次被写出后就会释放(ChannelOutboundBuffer.remove()),后面的引用再去写出时就会发生异常.<br>调用flush底层会调用<code>AbstractChannel.doWrite(ChannelOutboundBuffer in) ;--&gt;ChannelOutboundBuffer.removeBytes(long writtenBytes);--&gt;ChannelOutboundBuffer.remove();--&gt;ReferenceCountUtil.safeRelease(msg);</code></p>
+<ol start="2">
+<li>将证书文件上传到需要上传或下载镜像的主机<code>/etc/docker/certs.d/域名/</code>目录下。如：<code>/etc/docker/certs.d/harbor.zxzx.com/ca.crt</code>（如果节点比较多，可参考附录中的批量复制脚本）</li>
+<li>执行以下命令登录harbor私服，即可进行镜像的上传下载。</li>
+</ol>
+<ul>
+<li>登录 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@worker1 ~]<span class="comment"># docker login harbor.zxzx.com</span></span><br><span class="line">Username: admin</span><br><span class="line">Password: </span><br><span class="line">WARNING! Your password will be stored unencrypted <span class="keyword">in</span> /root/.docker/config.json.</span><br><span class="line">Configure a credential helper to remove this warning. See</span><br><span class="line">https://docs.docker.com/engine/reference/commandline/login/<span class="comment">#credentials-store</span></span><br><span class="line"></span><br><span class="line">Login Succeeded</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>上传<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   [root@worker1 harbor.zxzx.com]<span class="comment"># docker tag 7fc882ab93f6 harbor.zxzx.com/ttt/testimage:1</span></span><br><span class="line">   [root@worker1 harbor.zxzx.com]<span class="comment"># docker push harbor.zxzx.com/ttt/testimage:1</span></span><br><span class="line">   The push refers to repository [harbor.zxzx.com/ttt/testimage]</span><br><span class="line">   bd3fce854922: Pushed </span><br><span class="line">   d14f1ec69126: Pushed </span><br><span class="line">   be8b8b42328a: Pushed </span><br><span class="line">   1: digest: sha256:b57b81dd862099e7f6c414d92503054fc357ffdc7b2c648e778bb3e482ca76b4 size: 941   </span><br><span class="line">  ```   </span><br><span class="line">  **注意：** 这里有个坑，默认安装完成后，harbor的ingress会限制上传大小，所有大于1M的镜像都会报413的错误。为什么说这是个坑。因为，其实它默认是有设置了不限制上传大小的选项的。但是无效！因为默认设置的是`ingress.kubernetes.io/proxy-body-size: <span class="string">&#x27;0&#x27;</span>`，而实际上要设为 `nginx.org/client-max-body-size: <span class="string">&#x27;0&#x27;</span>`才能生效。不知道后面的版本是否还有这个问题。</span><br><span class="line">- 下载</span><br><span class="line">  ```bash</span><br><span class="line">   docker pull harbor.zxzx.com/ttt/testimage:1</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><ul>
+<li>ca 证书批量复制脚本<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1.本地创建ca.crt，并把上述解码的数据复制锦ca.crt文件内</span></span><br><span class="line">kubectl get secret harbor-harbor-ingress -n inner-harbor -o jsonpath=<span class="string">&quot;&#123;.data.ca\.crt&#125;&quot;</span>|<span class="built_in">base64</span> --decode|sed <span class="string">&#x27;w ca.crt&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2.循环在k8s集群所有节点上创建目录（各节点要开启免密登录）</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 06`;<span class="keyword">do</span> ssh node-<span class="variable">$n</span> <span class="string">&quot;mkdir -p /etc/docker/certs.d/harbor.xxxx.com.cn&quot;</span>;<span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3.将下载下来的harbor CA证书拷贝到每个node节点的etc/docker/certs.d/harbor.xxxx.com.cn目录下</span></span><br><span class="line"><span class="keyword">for</span> n <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 06`;<span class="keyword">do</span> scp ca.crt node-<span class="variable">$n</span>:/etc/docker/certs.d/harbor.xxxx.com.cn;<span class="keyword">done</span></span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>harbor-helm 配置参数说明<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br><span class="line">314</span><br><span class="line">315</span><br><span class="line">316</span><br><span class="line">317</span><br><span class="line">318</span><br><span class="line">319</span><br><span class="line">320</span><br><span class="line">321</span><br><span class="line">322</span><br><span class="line">323</span><br><span class="line">324</span><br><span class="line">325</span><br><span class="line">326</span><br><span class="line">327</span><br><span class="line">328</span><br><span class="line">329</span><br><span class="line">330</span><br><span class="line">331</span><br><span class="line">332</span><br><span class="line">333</span><br><span class="line">334</span><br><span class="line">335</span><br><span class="line">336</span><br><span class="line">337</span><br><span class="line">338</span><br><span class="line">339</span><br><span class="line">340</span><br><span class="line">341</span><br><span class="line">342</span><br><span class="line">343</span><br><span class="line">344</span><br><span class="line">345</span><br><span class="line">346</span><br><span class="line">347</span><br><span class="line">348</span><br><span class="line">349</span><br><span class="line">350</span><br><span class="line">351</span><br><span class="line">352</span><br><span class="line">353</span><br><span class="line">354</span><br><span class="line">355</span><br><span class="line">356</span><br><span class="line">357</span><br><span class="line">358</span><br><span class="line">359</span><br><span class="line">360</span><br><span class="line">361</span><br><span class="line">362</span><br><span class="line">363</span><br><span class="line">364</span><br><span class="line">365</span><br><span class="line">366</span><br><span class="line">367</span><br><span class="line">368</span><br><span class="line">369</span><br><span class="line">370</span><br><span class="line">371</span><br><span class="line">372</span><br><span class="line">373</span><br><span class="line">374</span><br></pre></td><td class="code"><pre><span class="line">expose:</span><br><span class="line">  # 设置暴露服务的方式。将类型设置为 ingress、clusterIP或nodePort并补充对应部分的信息。</span><br><span class="line">  type: ingress</span><br><span class="line">  tls:</span><br><span class="line">    # 是否开启 tls，注意：如果类型是 ingress 并且tls被禁用，则在pull/push镜像时，则必须包含端口。详细查看文档：https://github.com/goharbor/harbor/issues/5291。</span><br><span class="line">    enabled: true</span><br><span class="line">    # 如果你想使用自己的 TLS 证书和私钥，请填写这个 secret 的名称，这个 secret 必须包含名为 tls.crt 和 tls.key 的证书和私钥文件，如果没有设置则会自动生成证书和私钥文件。</span><br><span class="line">    secretName: &quot;&quot;</span><br><span class="line">    # 默认 Notary 服务会使用上面相同的证书和私钥文件，如果你想用一个独立的则填充下面的字段，注意只有类型是 ingress 的时候才需要。</span><br><span class="line">    notarySecretName: &quot;&quot;</span><br><span class="line">    # common name 是用于生成证书的，当类型是 clusterIP 或者 nodePort 并且 secretName 为空的时候才需要</span><br><span class="line">    commonName: &quot;&quot;</span><br><span class="line">  ingress:</span><br><span class="line">    hosts:</span><br><span class="line">      core: harbor.wangxu.com</span><br><span class="line">      notary: notary.wangxu.com</span><br><span class="line">    annotations:</span><br><span class="line">      ingress.kubernetes.io/ssl-redirect: &quot;true&quot;</span><br><span class="line">      nginx.ingress.kubernetes.io/ssl-redirect: &quot;true&quot;</span><br><span class="line">      ingress.kubernetes.io/proxy-body-size: &quot;0&quot;</span><br><span class="line">      nginx.ingress.kubernetes.io/proxy-body-size: &quot;0&quot;</span><br><span class="line">  clusterIP:</span><br><span class="line">    # ClusterIP 服务的名称</span><br><span class="line">    name: harbor</span><br><span class="line">    ports:</span><br><span class="line">      httpPort: 80</span><br><span class="line">      httpsPort: 443</span><br><span class="line">      # Notary 服务监听端口，只有当 notary.enabled 设置为 true 的时候有效</span><br><span class="line">      notaryPort: 4443</span><br><span class="line">  nodePort:</span><br><span class="line">    # NodePort 服务名称</span><br><span class="line">    name: harbor</span><br><span class="line">    ports:</span><br><span class="line">      http:</span><br><span class="line">        port: 80</span><br><span class="line">        nodePort: 30002</span><br><span class="line">      https: </span><br><span class="line">        port: 443</span><br><span class="line">        nodePort: 30003</span><br><span class="line">      notary: </span><br><span class="line">        port: 4443</span><br><span class="line">        nodePort: 30004</span><br><span class="line"></span><br><span class="line"># Harbor 核心服务外部访问 URL。主要用于：</span><br><span class="line"># 1) 补全 portal 页面上面显示的 docker/helm 命令</span><br><span class="line"># 2) 补全返回给 docker/notary 客户端的 token 服务 URL</span><br><span class="line"></span><br><span class="line"># 格式：protocol://domain[:port]。</span><br><span class="line"># 1) 如果 expose.type=ingress，&quot;domain&quot;的值就是 expose.ingress.hosts.core 的值 </span><br><span class="line"># 2) 如果 expose.type=clusterIP，&quot;domain&quot;的值就是 expose.clusterIP.name 的值</span><br><span class="line"># 3) 如果 expose.type=nodePort，&quot;domain&quot;的值就是 k8s 节点的 IP 地址</span><br><span class="line"></span><br><span class="line"># 如果在代理后面部署 Harbor，请将其设置为代理的 URL</span><br><span class="line">externalURL: https://harbor.wangxu.com</span><br><span class="line"></span><br><span class="line"># 默认情况下开启数据持久化，在k8s集群中需要动态的挂载卷默认需要一个StorageClass对象。</span><br><span class="line"># 如果你有已经存在可以使用的持久卷，需要在&quot;storageClass&quot;中指定你的 storageClass 或者设置 &quot;existingClaim&quot;。</span><br><span class="line">#</span><br><span class="line"># 对于存储 docker 镜像和 Helm charts 包，你也可以用 &quot;azure&quot;、&quot;gcs&quot;、&quot;s3&quot;、&quot;swift&quot; 或者 &quot;oss&quot;，直接在 &quot;imageChartStorage&quot; 区域设置即可</span><br><span class="line">persistence:</span><br><span class="line">  enabled: true</span><br><span class="line">  # 设置成&quot;keep&quot;避免在执行 helm 删除操作期间移除 PVC，留空则在 chart 被删除后删除 PVC</span><br><span class="line">  resourcePolicy: &quot;keep&quot;</span><br><span class="line">  persistentVolumeClaim:</span><br><span class="line">    registry:</span><br><span class="line">      # 使用一个存在的 PVC(必须在绑定前先手动创建)</span><br><span class="line">      existingClaim: &quot;&quot;</span><br><span class="line">      # 指定&quot;storageClass&quot;，或者使用默认的 StorageClass 对象，设置成&quot;-&quot;禁用动态分配挂载卷</span><br><span class="line">      storageClass: &quot;harbor-data&quot;</span><br><span class="line">      subPath: &quot;&quot;</span><br><span class="line">      accessMode: ReadWriteOnce</span><br><span class="line">      size: 5Gi</span><br><span class="line">    chartmuseum:</span><br><span class="line">      existingClaim: &quot;&quot;</span><br><span class="line">      storageClass: &quot;harbor-data&quot;</span><br><span class="line">      subPath: &quot;&quot;</span><br><span class="line">      accessMode: ReadWriteOnce</span><br><span class="line">      size: 5Gi</span><br><span class="line">    jobservice:</span><br><span class="line">      existingClaim: &quot;harbor-data&quot;</span><br><span class="line">      storageClass: &quot;&quot;</span><br><span class="line">      subPath: &quot;&quot;</span><br><span class="line">      accessMode: ReadWriteOnce</span><br><span class="line">      size: 1Gi</span><br><span class="line">    # 如果使用外部的数据库服务，下面的设置将会被忽略</span><br><span class="line">    database:</span><br><span class="line">      existingClaim: &quot;&quot;</span><br><span class="line">      storageClass: &quot;harbor-data&quot;</span><br><span class="line">      subPath: &quot;&quot;</span><br><span class="line">      accessMode: ReadWriteOnce</span><br><span class="line">      size: 1Gi</span><br><span class="line">    # 如果使用外部的 Redis 服务，下面的设置将会被忽略</span><br><span class="line">    redis:</span><br><span class="line">      existingClaim: &quot;&quot;</span><br><span class="line">      storageClass: &quot;harbor-data&quot;</span><br><span class="line">      subPath: &quot;&quot;</span><br><span class="line">      accessMode: ReadWriteOnce</span><br><span class="line">      size: 1Gi</span><br><span class="line">  # 定义使用什么存储后端来存储镜像和 charts 包，详细文档地址：https://github.com/docker/distribution/blob/master/docs/configuration.md#storage </span><br><span class="line">  imageChartStorage:</span><br><span class="line">    # 正对镜像和chart存储是否禁用跳转，对于一些不支持的后端(例如对于使用minio的`s3`存储)，需要禁用它。为了禁止跳转，只需要设置`disableredirect=true`即可，详细文档地址：https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect</span><br><span class="line">    disableredirect: false</span><br><span class="line">    # 指定存储类型：&quot;filesystem&quot;, &quot;azure&quot;, &quot;gcs&quot;, &quot;s3&quot;, &quot;swift&quot;, &quot;oss&quot;，在相应的区域填上对应的信息。</span><br><span class="line">    # 如果你想使用 pv 则必须设置成&quot;filesystem&quot;类型</span><br><span class="line">    type: filesystem</span><br><span class="line">    filesystem:</span><br><span class="line">      rootdirectory: /storage</span><br><span class="line">      #maxthreads: 100</span><br><span class="line">    azure:</span><br><span class="line">      accountname: accountname</span><br><span class="line">      accountkey: base64encodedaccountkey</span><br><span class="line">      container: containername</span><br><span class="line">      #realm: core.windows.net</span><br><span class="line">    gcs:</span><br><span class="line">      bucket: bucketname</span><br><span class="line">      # The base64 encoded json file which contains the key</span><br><span class="line">      encodedkey: base64-encoded-json-key-file</span><br><span class="line">      #rootdirectory: /gcs/object/name/prefix</span><br><span class="line">      #chunksize: &quot;5242880&quot;</span><br><span class="line">    s3:</span><br><span class="line">      region: us-west-1</span><br><span class="line">      bucket: bucketname</span><br><span class="line">      #accesskey: awsaccesskey</span><br><span class="line">      #secretkey: awssecretkey</span><br><span class="line">      #regionendpoint: http://myobjects.local</span><br><span class="line">      #encrypt: false</span><br><span class="line">      #keyid: mykeyid</span><br><span class="line">      #secure: true</span><br><span class="line">      #v4auth: true</span><br><span class="line">      #chunksize: &quot;5242880&quot;</span><br><span class="line">      #rootdirectory: /s3/object/name/prefix</span><br><span class="line">      #storageclass: STANDARD</span><br><span class="line">    swift:</span><br><span class="line">      authurl: https://storage.myprovider.com/v3/auth</span><br><span class="line">      username: username</span><br><span class="line">      password: password</span><br><span class="line">      container: containername</span><br><span class="line">      #region: fr</span><br><span class="line">      #tenant: tenantname</span><br><span class="line">      #tenantid: tenantid</span><br><span class="line">      #domain: domainname</span><br><span class="line">      #domainid: domainid</span><br><span class="line">      #trustid: trustid</span><br><span class="line">      #insecureskipverify: false</span><br><span class="line">      #chunksize: 5M</span><br><span class="line">      #prefix:</span><br><span class="line">      #secretkey: secretkey</span><br><span class="line">      #accesskey: accesskey</span><br><span class="line">      #authversion: 3</span><br><span class="line">      #endpointtype: public</span><br><span class="line">      #tempurlcontainerkey: false</span><br><span class="line">      #tempurlmethods:</span><br><span class="line">    oss:</span><br><span class="line">      accesskeyid: accesskeyid</span><br><span class="line">      accesskeysecret: accesskeysecret</span><br><span class="line">      region: regionname</span><br><span class="line">      bucket: bucketname</span><br><span class="line">      #endpoint: endpoint</span><br><span class="line">      #internal: false</span><br><span class="line">      #encrypt: false</span><br><span class="line">      #secure: true</span><br><span class="line">      #chunksize: 10M</span><br><span class="line">      #rootdirectory: rootdirectory</span><br><span class="line"></span><br><span class="line">imagePullPolicy: IfNotPresent</span><br><span class="line"></span><br><span class="line">logLevel: debug</span><br><span class="line"># Harbor admin 初始密码，Harbor 启动后通过 Portal 修改该密码</span><br><span class="line">harborAdminPassword: &quot;Harbor12345&quot;</span><br><span class="line"># 用于加密的一个 secret key，必须是一个16位的字符串</span><br><span class="line">secretKey: &quot;not-a-secure-key&quot;</span><br><span class="line"></span><br><span class="line"># 如果你通过&quot;ingress&quot;保留服务，则下面的Nginx不会被使用</span><br><span class="line">nginx:</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/nginx-photon</span><br><span class="line">    tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  # resources:</span><br><span class="line">  #  requests:</span><br><span class="line">  #    memory: 256Mi</span><br><span class="line">  #    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  ## 额外的 Deployment 的一些 annotations</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">portal:</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/harbor-portal</span><br><span class="line">    tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line"># resources:</span><br><span class="line">#  requests:</span><br><span class="line">#    memory: 256Mi</span><br><span class="line">#    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">core:</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/harbor-core</span><br><span class="line">    tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line"># resources:</span><br><span class="line">#  requests:</span><br><span class="line">#    memory: 256Mi</span><br><span class="line">#    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">adminserver:</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/harbor-adminserver</span><br><span class="line">    tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  # resources:</span><br><span class="line">  #  requests:</span><br><span class="line">  #    memory: 256Mi</span><br><span class="line">  #    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">jobservice:</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/harbor-jobservice</span><br><span class="line">    tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  maxJobWorkers: 10</span><br><span class="line">  # jobs 的日志收集器：&quot;file&quot;, &quot;database&quot; or &quot;stdout&quot;</span><br><span class="line">  jobLogger: file</span><br><span class="line"># resources:</span><br><span class="line">#   requests:</span><br><span class="line">#     memory: 256Mi</span><br><span class="line">#     cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">registry:</span><br><span class="line">  registry:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/registry-photon</span><br><span class="line">      tag: v2.6.2-v1.7.0</span><br><span class="line">  controller:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/harbor-registryctl</span><br><span class="line">      tag: v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">chartmuseum:</span><br><span class="line">  enabled: true</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/chartmuseum-photon</span><br><span class="line">    tag: v0.7.1-v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  # resources:</span><br><span class="line">  #  requests:</span><br><span class="line">  #    memory: 256Mi</span><br><span class="line">  #    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">clair:</span><br><span class="line">  enabled: true</span><br><span class="line">  image:</span><br><span class="line">    repository: goharbor/clair-photon</span><br><span class="line">    tag: v2.0.7-v1.7.0</span><br><span class="line">  replicas: 1</span><br><span class="line">  # 用于从 Internet 更新漏洞数据库的http(s)代理</span><br><span class="line">  httpProxy:</span><br><span class="line">  httpsProxy:</span><br><span class="line">  # clair 更新程序的间隔，单位为小时，设置为0来禁用</span><br><span class="line">  updatersInterval: 12</span><br><span class="line">  # resources:</span><br><span class="line">  #  requests:</span><br><span class="line">  #    memory: 256Mi</span><br><span class="line">  #    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">notary:</span><br><span class="line">  enabled: true</span><br><span class="line">  server:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/notary-server-photon</span><br><span class="line">      tag: v0.6.1-v1.7.0</span><br><span class="line">    replicas: 1</span><br><span class="line">    # resources:</span><br><span class="line">    #  requests:</span><br><span class="line">    #    memory: 256Mi</span><br><span class="line">    #    cpu: 100m</span><br><span class="line">  signer:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/notary-signer-photon</span><br><span class="line">      tag: v0.6.1-v1.7.0</span><br><span class="line">    replicas: 1</span><br><span class="line">    # resources:</span><br><span class="line">    #  requests:</span><br><span class="line">    #    memory: 256Mi</span><br><span class="line">    #    cpu: 100m</span><br><span class="line">  nodeSelector: &#123;&#125;</span><br><span class="line">  tolerations: []</span><br><span class="line">  affinity: &#123;&#125;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">database:</span><br><span class="line">  # 如果使用外部的数据库，则设置 type=external，然后填写 external 区域的一些连接信息</span><br><span class="line">  type: internal</span><br><span class="line">  internal:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/harbor-db</span><br><span class="line">      tag: v1.7.0</span><br><span class="line">    # 内部的数据库的初始化超级用户的密码</span><br><span class="line">    password: &quot;changeit&quot;</span><br><span class="line">    # resources:</span><br><span class="line">    #  requests:</span><br><span class="line">    #    memory: 256Mi</span><br><span class="line">    #    cpu: 100m</span><br><span class="line">    nodeSelector: &#123;&#125;</span><br><span class="line">    tolerations: []</span><br><span class="line">    affinity: &#123;&#125;</span><br><span class="line">  external:</span><br><span class="line">    host: &quot;192.168.0.1&quot;</span><br><span class="line">    port: &quot;5432&quot;</span><br><span class="line">    username: &quot;user&quot;</span><br><span class="line">    password: &quot;password&quot;</span><br><span class="line">    coreDatabase: &quot;registry&quot;</span><br><span class="line">    clairDatabase: &quot;clair&quot;</span><br><span class="line">    notaryServerDatabase: &quot;notary_server&quot;</span><br><span class="line">    notarySignerDatabase: &quot;notary_signer&quot;</span><br><span class="line">    sslmode: &quot;disable&quot;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br><span class="line"></span><br><span class="line">redis:</span><br><span class="line">  # 如果使用外部的 Redis 服务，设置 type=external，然后补充 external 部分的连接信息。</span><br><span class="line">  type: internal</span><br><span class="line">  internal:</span><br><span class="line">    image:</span><br><span class="line">      repository: goharbor/redis-photon</span><br><span class="line">      tag: v1.7.0</span><br><span class="line">    # resources:</span><br><span class="line">    #  requests:</span><br><span class="line">    #    memory: 256Mi</span><br><span class="line">    #    cpu: 100m</span><br><span class="line">    nodeSelector: &#123;&#125;</span><br><span class="line">    tolerations: []</span><br><span class="line">    affinity: &#123;&#125;</span><br><span class="line">  external:</span><br><span class="line">    host: &quot;192.168.0.2&quot;</span><br><span class="line">    port: &quot;6379&quot;</span><br><span class="line">    # coreDatabaseIndex 必须设置为0</span><br><span class="line">    coreDatabaseIndex: &quot;0&quot;</span><br><span class="line">    jobserviceDatabaseIndex: &quot;1&quot;</span><br><span class="line">    registryDatabaseIndex: &quot;2&quot;</span><br><span class="line">    chartmuseumDatabaseIndex: &quot;3&quot;</span><br><span class="line">    password: &quot;&quot;</span><br><span class="line">  podAnnotations: &#123;&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
 <p>（完）</p>
 
       
@@ -359,7 +236,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Netty</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">k8s</a>
         		</li>
       		
 		</ul>
@@ -369,7 +250,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/03/181003-netty/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/26/211119-k8s-install-harbor/">展开全文 >></a>
         </p>
       
 
@@ -399,42 +280,100 @@
 
 
   
-    <article id="post-181003-mysql8" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-211119-k8s-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/03/181003-mysql8/">mysql8.0常用命令</a>
+      <a class="article-title" href="/2022/10/26/211119-k8s-use/">k8s常用命令</a>
     </h1>
   
 
         
-        <a href="/2018/10/03/181003-mysql8/" class="archive-article-date">
-  	<time datetime="2018-10-03T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
+        <a href="/2022/10/26/211119-k8s-use/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:35:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>登录mysql</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mysql -u root -p</span><br><span class="line">$ 密码</span><br></pre></td></tr></table></figure>
+        <h1 id="k8s-安装"><a href="#k8s-安装" class="headerlink" title="k8s 安装"></a>k8s 安装</h1><p>安装k8s推荐使用kuboard的一键安装脚本：<a target="_blank" rel="noopener" href="https://kuboard.cn/install/install-k8s.html">https://kuboard.cn/install/install-k8s.html</a> 根据文档指导进行安装。</p>
+<p><strong>备注：如果使用了harbor私服，那么往集群中添加了新的机器后，记得配置新机器的ca证书</strong></p>
+<p>StatefulSet 可以使用 Headless Service 来控制其 Pod 所在的域。该域（domain）的格式为 $(service name).$(namespace).svc.cluster.local，其中 “cluster.local” 是集群的域。<br>StatefulSet 中 Pod 的 hostname 格式为 $(StatefulSet name)-$(Pod 序号)<br>StatefulSet 中每一个 Pod 将被分配一个 dnsName，格式为： $(podName).$(所在域名)。如：inner-nginx-0.inner-nginx.inner-server.svc.cluster.local</p>
+<h2 id="手动安装注意事项"><a href="#手动安装注意事项" class="headerlink" title="手动安装注意事项"></a>手动安装注意事项</h2><p>如果想要手动安装k8s，可以参考kuboard的安装脚本，按顺序手动执行脚本中的命令即可。<br>如果安装时没有参考kuboard的安装脚本，记得安装之前一定要修改 <code>/etc/sysctl.conf</code> 否则无法正常的进行集群内通信，ingress也会不停的启动失败。修改方式如下（从kuboard的安装脚本中摘抄的）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># 如果有配置，则修改</span><br><span class="line">sed -i &quot;s#^net.ipv4.ip_forward.*#net.ipv4.ip_forward=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.bridge.bridge-nf-call-ip6tables.*#net.bridge.bridge-nf-call-ip6tables=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.bridge.bridge-nf-call-iptables.*#net.bridge.bridge-nf-call-iptables=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.ipv6.conf.all.disable_ipv6.*#net.ipv6.conf.all.disable_ipv6=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.ipv6.conf.default.disable_ipv6.*#net.ipv6.conf.default.disable_ipv6=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.ipv6.conf.lo.disable_ipv6.*#net.ipv6.conf.lo.disable_ipv6=1#g&quot;  /etc/sysctl.conf</span><br><span class="line">sed -i &quot;s#^net.ipv6.conf.all.forwarding.*#net.ipv6.conf.all.forwarding=1#g&quot;  /etc/sysctl.conf</span><br><span class="line"># 可能没有，追加</span><br><span class="line">echo &quot;net.ipv4.ip_forward = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.bridge.bridge-nf-call-ip6tables = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.bridge.bridge-nf-call-iptables = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.ipv6.conf.all.disable_ipv6 = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.ipv6.conf.default.disable_ipv6 = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.ipv6.conf.lo.disable_ipv6 = 1&quot; &gt;&gt; /etc/sysctl.conf</span><br><span class="line">echo &quot;net.ipv6.conf.all.forwarding = 1&quot;  &gt;&gt; /etc/sysctl.conf</span><br></pre></td></tr></table></figure>
 
-<p>查看所有用户</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; use mysql；</span><br><span class="line">mysql&gt; select * from user;</span><br></pre></td></tr></table></figure>
+<h2 id="多网卡注意事项"><a href="#多网卡注意事项" class="headerlink" title="多网卡注意事项"></a>多网卡注意事项</h2><p>如果机器有多张网卡，calico网络注册时有可能会注册到其它网卡。导致 calico-node 创建失败，此时可以用环境变量指定网卡。方式如下：<br>编辑<code>calico-node</code> 在工作容器<code>calico-node</code>中添加环境变量IP_AUTODETECTION_METHOD&#x3D;interface&#x3D;enp.*</p>
+<ul>
+<li><p>centos 一键安装docker和K8S<br>访问 <a target="_blank" rel="noopener" href="https://kuboard.cn/install/install-k8s.html#%E5%AE%89%E8%A3%85docker%E5%8F%8Akubelet">https://kuboard.cn/install/install-k8s.html#%E5%AE%89%E8%A3%85docker%E5%8F%8Akubelet</a> 确认并勾选7个复选框后，会出现一键安装自动脚步。复制并执行即可。</p>
+</li>
+<li><p>centos 单独安装k8s<br>复制下面的命令，从阿里镜像源安装K8S</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt;EOF &gt; /etc/yum.repos.d/kubernetes.repo</span><br><span class="line">[kubernetes]</span><br><span class="line">name=Kubernetes</span><br><span class="line">baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/</span><br><span class="line">enabled=1</span><br><span class="line">gpgcheck=1</span><br><span class="line">repo_gpgcheck=1</span><br><span class="line">gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</span><br><span class="line">EOF</span><br><span class="line">setenforce 0</span><br><span class="line">yum install -y kubelet kubeadm kubectl</span><br><span class="line">systemctl enable kubelet &amp;&amp; systemctl start kubelet</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>其它系统安装k8s可参考：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/mirror/kubernetes?spm=a2c6h.13651102.0.0.3e221b11yZ0SdT">https://developer.aliyun.com/mirror/kubernetes?spm=a2c6h.13651102.0.0.3e221b11yZ0SdT</a></p>
+</li>
+</ul>
+<h1 id="k8s-常用命令"><a href="#k8s-常用命令" class="headerlink" title="k8s 常用命令"></a>k8s 常用命令</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">#设置节点为不可调度</span><br><span class="line">kubectl cordon nodeName</span><br><span class="line"></span><br><span class="line">#取消节点不可调度</span><br><span class="line">kubectl uncordon nodeName</span><br><span class="line"></span><br><span class="line">#驱逐节点的pod</span><br><span class="line">kubectl drain --ignore-daemonsets --delete-local-data nodeName</span><br><span class="line"></span><br><span class="line">#删除节点</span><br><span class="line">kubectl delete node node07-ingress</span><br><span class="line"></span><br><span class="line">#查看集群事件</span><br><span class="line">kubectl get events</span><br><span class="line"></span><br><span class="line">#查看node或pod的详情</span><br><span class="line">kubectl describe  node node名</span><br><span class="line">kubectl describe  pod pod名</span><br><span class="line"></span><br><span class="line">#查看所有pod[单个pod]详细信息，也就是可以查看pod具体运行在哪个节点上</span><br><span class="line">kubectl get pods [pod名] -o wide</span><br><span class="line"></span><br><span class="line">#根据pod名查看容器的日志</span><br><span class="line">kubectl logs -f --tail=50 pod名</span><br><span class="line">#根据deploy名查看容器的日志</span><br><span class="line">kubectl logs -f --tail=50 deploy/deploy名</span><br><span class="line">#根据service名查看容器的日志</span><br><span class="line">kubectl logs -f --tail=50 svc/serivce名</span><br><span class="line"></span><br><span class="line">#根据pod名进入容器内部</span><br><span class="line">kubectl exec -it pod名 /bin/bash</span><br><span class="line">#根据deploy名进入该部署的首个容器内部</span><br><span class="line">kubectl exec -it deploy/deploy名 /bin/bash</span><br><span class="line">#根据service名进入该服务的首个容器内部</span><br><span class="line">kubectl exec -it svc/serivce名 /bin/bash</span><br><span class="line"></span><br><span class="line"># 查看所有的资源信息</span><br><span class="line">kubectl get all</span><br><span class="line"># 查看pod列表</span><br><span class="line">kubectl get pod</span><br><span class="line"># 显示pod节点的标签信息</span><br><span class="line">kubectl get pod --show-labels</span><br><span class="line"># 根据指定标签匹配到具体的pod</span><br><span class="line">kubectl get pods -l app=example</span><br><span class="line"># 查看node节点列表</span><br><span class="line">kubectl get node </span><br><span class="line"># 显示node节点的标签信息</span><br><span class="line">kubectl get node --show-labels</span><br><span class="line"># 查看pod详细信息，也就是可以查看pod具体运行在哪个节点上</span><br><span class="line">kubectl get pod -o wide</span><br><span class="line"># 查看服务的详细信息，显示了服务名称，类型，集群ip，端口，时间等信息</span><br><span class="line">kubectl get svc</span><br><span class="line">[root@master ~]# kubectl get svc</span><br><span class="line">NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)          AGE</span><br><span class="line">go-service      NodePort    10.10.10.247   &amp;lt;none&amp;gt;        8089:33702/TCP   29m</span><br><span class="line">java-service    NodePort    10.10.10.248   &amp;lt;none&amp;gt;        8082:32823/TCP   5h17m</span><br><span class="line">kubernetes      ClusterIP   10.10.10.1     &amp;lt;none&amp;gt;        443/TCP          5d16h</span><br><span class="line">nginx-service   NodePort    10.10.10.146   &amp;lt;none&amp;gt;        88:34823/TCP     2d19h</span><br><span class="line"># 查看命名空间</span><br><span class="line">kubectl get ns</span><br><span class="line"># 查看所有pod所属的命名空间</span><br><span class="line">kubectl get pod --all-namespaces</span><br><span class="line"># 查看所有pod所属的命名空间并且查看都在哪些节点上运行</span><br><span class="line">kubectl get pod --all-namespaces  -o wide</span><br><span class="line"># 查看目前所有的replica set，显示了所有的pod的副本数，以及他们的可用数量以及状态等信息</span><br><span class="line">kubectl get rs</span><br><span class="line">[root@master ~]# kubectl get rs</span><br><span class="line">NAME                          DESIRED   CURRENT   READY   AGE</span><br><span class="line">go-deployment-58c76f7d5c      1         1         1       32m</span><br><span class="line">java-deployment-76889f56c5    1         1         1       5h21m</span><br><span class="line">nginx-deployment-58d6d6ccb8   3         3         3       2d19h</span><br><span class="line"># 查看目前所有的deployment</span><br><span class="line">kubectl get deployment</span><br><span class="line">[root@master ~]# kubectl get deployment</span><br><span class="line">NAME               READY   UP-TO-DATE   AVAILABLE   AGE</span><br><span class="line">go-deployment      1/1     1            1           34m</span><br><span class="line">java-deployment    1/1     1            1           5h23m</span><br><span class="line">nginx-deployment   3/3     3            3           2d19h</span><br><span class="line"># 查看已经部署了的所有应用，可以看到容器，以及容器所用的镜像，标签等信息</span><br><span class="line"> kubectl get deploy -o wide</span><br><span class="line">[root@master bin]# kubectl get deploy -o wide     </span><br><span class="line">NAME    READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES       SELECTOR</span><br><span class="line">nginx   3/3     3            3           16m   nginx        nginx:1.10   app=example</span><br></pre></td></tr></table></figure>
 
-<p>创建用户</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#创建用户‘htrace22’（`%`表示所有ip均可链接，可制定为具体的ip地址）</span><br><span class="line">mysql&gt; CREATE USER `htrace22`@`%` IDENTIFIED BY &#x27;密码&#x27;;  </span><br><span class="line"></span><br><span class="line">#创建用户‘hszk’并指定加密方式为&#x27;mysql_native_password&#x27;</span><br><span class="line">mysql&gt; CREATE USER &#x27;hszk&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password   BY &#x27;密码&#x27;; </span><br></pre></td></tr></table></figure>
+<p>一些常用命令可通过help查看，如 <code>kubectl cp --help</code> 可查看cp命令的使用方法。另外还可参考该博客: <a target="_blank" rel="noopener" href="https://www.jianshu.com/p/fa2d827ac725">https://www.jianshu.com/p/fa2d827ac725</a></p>
+<p>k8s管理常用命令：<a target="_blank" rel="noopener" href="https://kuboard.cn/learning/k8s-basics/explore.html#%E5%AE%9E%E6%88%98-%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4">https://kuboard.cn/learning/k8s-basics/explore.html#%E5%AE%9E%E6%88%98-%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4</a></p>
+<p>k8s对象管理常用命令：<a target="_blank" rel="noopener" href="https://kuboard.cn/learning/k8s-intermediate/obj/manage.html#%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F">https://kuboard.cn/learning/k8s-intermediate/obj/manage.html#%E7%AE%A1%E7%90%86%E6%96%B9%E5%BC%8F</a></p>
+<p>容器组_Debug初始化容器: <a target="_blank" rel="noopener" href="https://kuboard.cn/learning/k8s-intermediate/workload/init-debug.html#%E6%A3%80%E6%9F%A5%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E5%99%A8%E7%9A%84%E7%8A%B6%E6%80%81">https://kuboard.cn/learning/k8s-intermediate/workload/init-debug.html#%E6%A3%80%E6%9F%A5%E5%88%9D%E5%A7%8B%E5%8C%96%E5%AE%B9%E5%99%A8%E7%9A%84%E7%8A%B6%E6%80%81</a></p>
+<p>service selector应与Pod的标签匹配<br>service的 targetPort 应与Pod中容器的 containerPort 匹配<br>service的端口可以是任何数字。多个服务可以使用同一端口，因为它们分配了不同的IP地址。<br>ingress的 servicePort 应该匹配 service 的 port<br>serivce的名称应与 ingress 中的 serviceName 字段匹配</p>
+<h1 id="获得节点join命令-添加新节点用-："><a href="#获得节点join命令-添加新节点用-：" class="headerlink" title="获得节点join命令(添加新节点用)："></a>获得节点join命令(添加新节点用)：</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 只在 master 节点执行</span><br><span class="line">kubeadm token create --print-join-command</span><br></pre></td></tr></table></figure>
+<h1 id="切换命名空间"><a href="#切换命名空间" class="headerlink" title="切换命名空间"></a>切换命名空间</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 查看所有命名空间</span><br><span class="line">kubectl get namespaces</span><br><span class="line"># 切换</span><br><span class="line">kubectl config set-context --current --namespace=&lt;您的名称空间&gt;</span><br><span class="line"># 验证结果</span><br><span class="line">kubectl config view --minify | grep namespace:</span><br><span class="line">```  </span><br><span class="line"></span><br><span class="line"># 删除容器组（删除后会重新创建）</span><br></pre></td></tr></table></figure>
+<p>kubectl delete pod 容器组名称 -n 命名空间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 强制删除特定pods</span><br></pre></td></tr></table></figure>
+<p>kubectl delete pods pod名称 -n 命名空间 –grace-period&#x3D;0 –force</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 删除集群中失败的pods</span><br></pre></td></tr></table></figure>
+<p>kubectl get pods –field-selector&#x3D;status.phase&#x3D;Failed –all-namespaces |awk ‘{ system(“kubectl delete pod “$2” -n “$1) }’</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 强制删除Terminating状态的pods</span><br></pre></td></tr></table></figure>
+<p>kubectl get pods –all-namespaces |grep Terminating|awk ‘{ system(“kubectl delete pod “$2” -n “$1” –grace-period&#x3D;0 –force”) }’</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 删除deployment</span><br></pre></td></tr></table></figure>
+<p>kubectl delete deployment deployment名称 -n 命名空间</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"># 更新应用程序</span><br><span class="line"></span><br><span class="line">- 方法1：使用VI或其他编辑器，编辑已存在的yaml文件，使用apply命令更新</span><br></pre></td></tr></table></figure>
+<p>  kubectl apply -f nginx-deployment.yaml<br>  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">- 方法2：使用 edit 命令更新</span><br></pre></td></tr></table></figure></p>
+<h1 id="更新-inner-harbor-命名空间的名称为-harbor-harbor-ingress-的-ingress（像使用vi命令一样编辑保存即可）"><a href="#更新-inner-harbor-命名空间的名称为-harbor-harbor-ingress-的-ingress（像使用vi命令一样编辑保存即可）" class="headerlink" title="更新 inner-harbor 命名空间的名称为 harbor-harbor-ingress 的 ingress（像使用vi命令一样编辑保存即可）"></a>更新 inner-harbor 命名空间的名称为 harbor-harbor-ingress 的 ingress（像使用vi命令一样编辑保存即可）</h1><p>  kubectl edit ingress harbor-harbor-ingress -n inner-harbor</p>
+<pre><code>- 其它： 使用 set 命令更新（没用过，挺麻烦想用的话百度吧）；或者使用图形管理界面。
 
-<p>赋权限给用户</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#授权‘htrace22’用户，拥有所有数据库的所有操作权限</span><br><span class="line">mysql&gt; GRANT ALL ON *.* TO `htrace22`@`%` WITH GRANT OPTION; </span><br><span class="line"></span><br><span class="line">#授权‘hszk’用户，拥有‘parkinglot’数据库的所有操作权限</span><br><span class="line">mysql&gt; GRANT ALL PRIVILEGES ON parkinglot.* TO &#x27;hszk&#x27;@&#x27;%&#x27;;</span><br></pre></td></tr></table></figure>
+# ingress配置websocket
+为ingress添加注解`nginx.org/websocket-services`,并将该注解的值设置为当前部署的服务名（service name）。
 
-<p>修改用户密码的加密方式为<code>mysql_native_password </code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; ALTER USER &#x27;htrace2&#x27;@&#x27;%&#x27; IDENTIFIED BY &#x27;htrace@20182&#x27; PASSWORD EXPIRE NEVER;</span><br><span class="line">mysql&gt; ALTER USER &#x27;htrace2&#x27;@&#x27;%&#x27; IDENTIFIED WITH mysql_native_password BY &#x27;htrace@20182&#x27;; </span><br><span class="line">mysql&gt; FLUSH PRIVILEGES;</span><br></pre></td></tr></table></figure>
-<p>删除用户</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; DROP USER &#x27;htrace2&#x27;@&#x27;%&#x27;</span><br></pre></td></tr></table></figure>
+# ingress配置上传文件大小限制
+为ingress添加注解`nginx.org/client-max-body-size`,如`10m`限制为10M大小，若值设置为`0`则代表不限制大小。
+
+  
+
+kuboard调试：https://kuboard.cn/learning/k8s-advanced/ts/application.html#debugging-pods
+
+
+# k8s 几种service的区别
+
+## 不创建service
+不会分配集群service IP，也不会解析集群域名。只能通过分配的pod IP地址访问。
+
+## Headless
+不会分配集群service IP，但是可以解析集群域名，域名会被解析到所有的pod ip。可以通过集群域名和pod ip进行访问。
+
+## ClusterIP
+会分配集群service IP，也可以解析集群域名，域名会解析到service ip，通过service ip 负载均衡到每一个pod。可以通过service ip、集群域名、pod ip 进行访问。
+
+## NodePort
+具备 ClusterIP 模式的所有特性，并且会将 service ip 的端口映射到节点宿主机。除了具备 ClusterIP 的所有访问方式，还可通过节点宿主机的端口访问。
+
+
+
+# workDir
+Dockerfile中的WORKDIR指令用于指定容器的一个目录， 容器启动时执行的命令会在该目录下执行，相当于设置容器的工作目录了。
+
+# command和args注意事项
+在kuboard中添加command自定义启动命令或args自定义参数时，如果命令很长有多个参数，不能直接把全部的整行命令复制粘贴过去，要每个参数都添加一项。如：`java -jar /app.jar` 要添加三项，分别为 `java` `-jar` `/app.jar`才可以。（或者直接编辑yaml配置文件）**命令在实际执行时，多个参数之间是用空格隔开的，用空格隔开就代表多个参数。每个参数都要点加号，添加一项。**
+
+（完）
+</code></pre>
+
       
 
       
@@ -447,7 +386,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">k8s</a>
         		</li>
       		
 		</ul>
@@ -457,7 +396,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/03/181003-mysql8/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/26/211119-k8s-use/">展开全文 >></a>
         </p>
       
 
@@ -487,53 +426,92 @@
 
 
   
-    <article id="post-181003-redis" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-211119-jvm-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/10/03/181003-redis/">redis安装与常用操作</a>
+      <a class="article-title" href="/2022/10/26/211119-jvm-use/">jvm调试调优</a>
     </h1>
   
 
         
-        <a href="/2018/10/03/181003-redis/" class="archive-article-date">
-  	<time datetime="2018-10-03T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-10-03</time>
+        <a href="/2022/10/26/211119-jvm-use/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:34:11.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="Linux-yum方式安装"><a href="#Linux-yum方式安装" class="headerlink" title="Linux yum方式安装"></a>Linux yum方式安装</h2><p>查找redis的安装文件详情(如果查找不到说明没有以yum的方式安装过该软件包)<br><code>rpm -ql redis</code></p>
-<p>在软件仓库中搜索该软件包<br><code>yum search redis</code></p>
-<p>安装该软件包<br><code>yum -y install redis.x86_64</code></p>
-<p>启动redis服务<br><code>systemctl start redis.service</code></p>
-<p>停止redis服务<br><code>systemctl stop redis.service</code></p>
-<p>重启redis服务<br><code>systemctl restart redis.service</code></p>
-<p>检查redis服务状态<br><code>systemctl status redis.service</code></p>
-<p>随系统启动redis服务(开机自启动)<br><code>systemctl enable redis.service</code></p>
-<p>关闭随系统启动redis服务(关闭开机自启动)<br><code>systemctl disable redis.service</code></p>
-<h2 id="Linux-编译方式安装"><a href="#Linux-编译方式安装" class="headerlink" title="Linux 编译方式安装"></a>Linux 编译方式安装</h2><p>下载,通过wget或其他方式下载最新的redis压缩包.解压编译安装。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://download.redis.io/releases/redis-2.8.17.tar.gz</span><br><span class="line">$ tar xzf redis-2.8.17.tar.gz</span><br><span class="line">$ cd redis-2.8.17</span><br><span class="line">$ make</span><br><span class="line">$ make install #可选步骤</span><br></pre></td></tr></table></figure>
+        <h1 id="常用参数设置"><a href="#常用参数设置" class="headerlink" title="常用参数设置"></a>常用参数设置</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">java -Xms512m -Xmx512m -Xmn200m -Xss128k -Xloggc:/app-gc.log -XX:+PrintHeapAtGC -XX:+PrintGCDetails -jar /app.jar</span><br><span class="line"></span><br><span class="line">-Xms 堆内存初始值</span><br><span class="line">-Xmx 最大堆内存</span><br><span class="line">-Xmn 年轻代大小，若不熟悉最好保留默认值</span><br><span class="line">-Xss 每个线程栈大小，若不熟悉最好保留默认值。（64位操作系统默认1m，在相同物理内存下，减小这个值能生成更多的线程）</span><br><span class="line">-Xloggc 将GC日志打印到指定的日志文件</span><br><span class="line">-XX:+PrintHeapAtGC 打印GC前后的堆内存使用情况</span><br><span class="line">-XX:+PrintGCDetails 打印GC的详细信息</span><br></pre></td></tr></table></figure>
+<p><strong>生产环境Xms和Xmx设置为相同，可有效避免扩容触发GC。</strong><br>Xmx 和 Xms设置为老年代存活对象的3-4倍，即FullGC之后的老年代内存占用的3-4倍。<br>年轻代的内存大小设置为老年代存活对象的1-1.5倍。<br>老年代的内存大小设置为老年代存活对象的2-3倍。<br>Sun官方建议年轻代的大小为整个堆的3&#x2F;8左右，所以按照上述设置的方式，基本符合Sun的建议。</p>
+<h1 id="GC日志分析（通过分析GC日志，确定程序要分配的合理内存大小）"><a href="#GC日志分析（通过分析GC日志，确定程序要分配的合理内存大小）" class="headerlink" title="GC日志分析（通过分析GC日志，确定程序要分配的合理内存大小）"></a>GC日志分析（通过分析GC日志，确定程序要分配的合理内存大小）</h1><p>可在程序运行时打印GC日志，稳定运行一段时间后，分析GC日志中的内存详细，来进行合理的内存分配。</p>
+<h2 id="Xloggc-gc-log"><a href="#Xloggc-gc-log" class="headerlink" title="-Xloggc:gc.log"></a>-Xloggc:gc.log</h2><p>如果使用该参数-Xloggc则默认开启如下两个参数 <code>-XX:+PrintGC -XX:+PrintGCTimeStamps</code>，打印的GC日志格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.318: [GC (Allocation Failure)  61805K-&gt;9849K(256000K), 0.0041139 secs]</span><br></pre></td></tr></table></figure>
 
-<p>解压,编译,安装(执行make编译后,redis的src目录下会生成redis服务程序redis-server,和客户端程序redis-cli,其实就可以用了,不需再执行安装命令make install也可以,如果执行了make install,只会安装redis-server不会安装redis-cli,需要从src目录下手动拷贝一份redis-cli到安装目录,或去src目录下执行redis-cli命令,或添加到path,官网没有make install这一步,直接make就完事了)</p>
-<p> 进入src目录下 执行启动服务命令<br><code>$ ./redis-server ../redis.conf</code></p>
-<h2 id="windows下安装"><a href="#windows下安装" class="headerlink" title="windows下安装"></a>windows下安装</h2><p>(别折腾,直接下载msi安装包比较方便)<br>windows版地址: <a target="_blank" rel="noopener" href="https://github.com/MicrosoftArchive/redis/releases">https://github.com/MicrosoftArchive/redis/releases</a><br>如果有问题可参考:<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/e16d23e358c0">https://www.jianshu.com/p/e16d23e358c0</a><br>如果想折腾,可参考安装完成后的安装目录中的”Windows Service Documentation.docx”</p>
-<h2 id="其它常用命令和操作"><a href="#其它常用命令和操作" class="headerlink" title="其它常用命令和操作"></a>其它常用命令和操作</h2><p>备份一下默认配置文件,以防改坏<br><code>cp redis.conf  /某个路径</code></p>
-<p>修改配置文件,以守护进程的方式启动<br><code>vim redis.conf</code> 将 <code>daemonize</code> 改为<code>yes</code></p>
-<p>永久设置密码</p>
-<p>1.修改redis.conf中的<code>requirepass</code>项,然后重启服务生效(该项默认是注释的)<br>2.通过<code>config set requirepass 密码</code>命令设置,然后通过<code>config rewrite</code>命令重写配置文件.立即生效,不用重启.</p>
-<p>临时设置密码</p>
-<p>通过<code>config set requirepass 密码</code>命令设置后,如果不执行<code>config rewrite</code>,则服务重启后本次设置的密码就会失效.</p>
-<p>查看当前redis密码<br><code>config get requirepass</code></p>
-<p>取消密码<br><code>config set requirepass &quot;&quot;</code>命令 或注释配置文件中的<code>requirepass</code>项</p>
-<p>启动redis客户端,并链接到redis服务<br><code>redis-cli -h 地址 -p 端口</code></p>
-<p>启动redis客户端,并链接到redis服务(有密码)<br><code>redis-cli -p 8887 -a 密码</code> 或使用 <code>redis-cli -h 地址 -p 端口</code>链接成功后,再执行<code>auth 密码</code> 即可.</p>
-<p>清除缓存<br><code>redis-cli flushall</code></p>
-<p><strong>关闭redis</strong><br>在未连接到redis的情况下执行(先连接再关闭)：<br><code>redis-cli -h 127.0.0.1 -p 8887 shutdown</code><br>在链接到redis的情况下执行：<br><code>shutdown</code></p>
+<p><code>0.138</code> 表示从jvm启动到该次GC时程序运行的秒数</p>
+<p><code>GC</code> 表示是一次YGC（Young GC）</p>
+<p><code>Allocation Failure</code> 表示是失败的类型</p>
+<p><code>61805K-&gt;9849K(256000K)</code> 回收前的堆大小-&gt;回收后的堆大小(分配的堆总大小)</p>
+<p><code>0.0041139 secs</code> 表示这次GC总计所用的时间</p>
+<h2 id="XX-PrintGCDetails"><a href="#XX-PrintGCDetails" class="headerlink" title="-XX:+PrintGCDetails"></a>-XX:+PrintGCDetails</h2><p>打印详细的GC日志，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[GC (Allocation Failure) [PSYoungGen: 53248K-&gt;2176K(59392K)] 58161K-&gt;7161K(256000K), 0.0039189 secs] [Times: user=0.02 sys=0.01, real=0.00 secs]</span><br></pre></td></tr></table></figure>
+
+<p><code>GC</code> 表示是一次YGC（Young GC）</p>
+<p><code>Allocation Failure</code> 表示是失败的类型</p>
+<p><code>PSYoungGen</code> 表示年轻代大小</p>
+<p><code>53248K-&gt;2176K</code> 表示年轻代占用从53248K降为2176K，59392K表示年轻带的总大小</p>
+<p><code>58161K-&gt;7161K</code> 表示整个堆占用从53248K降为2176K，256000K表示整个堆的大小</p>
+<p><code>0.0039189 secs</code> 表示这次GC总计所用的时间</p>
+<p><code>[Times: user=0.02 sys=0.01, real=0.00 secs]</code> 分别表示，用户态占用时长，内核用时，真实用时。</p>
+<h2 id="XX-PrintGCTimeStamps"><a href="#XX-PrintGCTimeStamps" class="headerlink" title="-XX:+PrintGCTimeStamps"></a>-XX:+PrintGCTimeStamps</h2><p>如果加上<code>-XX:+PrintGCTimeStamps</code>那么日志的最前面多了一个时间戳： 如：1.963， 表示从JVM启动到打印GC时刻用了1.963秒。</p>
+<h2 id="XX-PrintGCDateStamps"><a href="#XX-PrintGCDateStamps" class="headerlink" title="-XX:+PrintGCDateStamps"></a>-XX:+PrintGCDateStamps</h2><p>如果加上<code>-XX:+PrintGCDateStamps</code>那么日志的最前面多了一个日期时间： 如：2019-03-05T16:56:15.108+0800， 表示打印GC的时刻的时间是2019-03-05T16:56:15.108+0800。+0800表示是东8区。</p>
+<h2 id="XX-PrintHeapAtGC"><a href="#XX-PrintHeapAtGC" class="headerlink" title="-XX:+PrintHeapAtGC"></a>-XX:+PrintHeapAtGC</h2><p>打印GC前后的堆内存使用情况，格式如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;Heap before GC invocations=0 (full 0):</span><br><span class="line"> def new generation   total 4928K, used 4368K [0x00000000f0000000, 0x00000000f0550000, 0x00000000f5550000)</span><br><span class="line">  eden space 4416K,  98% used [0x00000000f0000000, 0x00000000f0444010, 0x00000000f0450000)</span><br><span class="line">  from space 512K,   0% used [0x00000000f0450000, 0x00000000f0450000, 0x00000000f04d0000)</span><br><span class="line">  to   space 512K,   0% used [0x00000000f04d0000, 0x00000000f04d0000, 0x00000000f0550000)</span><br><span class="line"> tenured generation   total 10944K, used 0K [0x00000000f5550000, 0x00000000f6000000, 0x0000000100000000)</span><br><span class="line">   the space 10944K,   0% used [0x00000000f5550000, 0x00000000f5550000, 0x00000000f5550200, 0x00000000f6000000)</span><br><span class="line"> Metaspace       used 4879K, capacity 5078K, committed 5248K, reserved 1056768K</span><br><span class="line">  class space    used 515K, capacity 581K, committed 640K, reserved 1048576K</span><br><span class="line">0.229: [GC (Allocation Failure)  4368K-&gt;1230K(15872K), 0.0046901 secs]</span><br><span class="line">Heap after GC invocations=1 (full 0):</span><br><span class="line"> def new generation   total 4928K, used 512K [0x00000000f0000000, 0x00000000f0550000, 0x00000000f5550000)</span><br><span class="line">  eden space 4416K,   0% used [0x00000000f0000000, 0x00000000f0000000, 0x00000000f0450000)</span><br><span class="line">  from space 512K, 100% used [0x00000000f04d0000, 0x00000000f0550000, 0x00000000f0550000)</span><br><span class="line">  to   space 512K,   0% used [0x00000000f0450000, 0x00000000f0450000, 0x00000000f04d0000)</span><br><span class="line"> tenured generation   total 10944K, used 718K [0x00000000f5550000, 0x00000000f6000000, 0x0000000100000000)</span><br><span class="line">   the space 10944K,   6% used [0x00000000f5550000, 0x00000000f5603808, 0x00000000f5603a00, 0x00000000f6000000)</span><br><span class="line"> Metaspace       used 4879K, capacity 5078K, committed 5248K, reserved 1056768K</span><br><span class="line">  class space    used 515K, capacity 581K, committed 640K, reserved 1048576K</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>invocations</code> 表示GC的次数，每次GC增加一次</p>
+<p><code>Heap before GC invocations=1</code> 表示是第1次GC调用之前的堆内存状况</p>
+<p><code>Heap after GC invocations=1</code> 表示是第1次GC调用之后的堆内存状况</p>
+<p><code>(full 0)</code> 表示已进行了0次 full GC</p>
+<p>GC日志分析其它参考：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/jalja365/p/12144938.html">https://www.cnblogs.com/jalja365/p/12144938.html</a></p>
+<h1 id="调整linux最大线程数"><a href="#调整linux最大线程数" class="headerlink" title="调整linux最大线程数"></a>调整linux最大线程数</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">echo 100000 &gt; /proc/sys/kernel/threads-max</span><br><span class="line">echo 100000 &gt; /proc/sys/kernel/pid_max</span><br><span class="line">echo 100000 &gt; /proc/sys/vm/max_map_count</span><br><span class="line">ulimit -u unlimited</span><br></pre></td></tr></table></figure>
+
+<h1 id="查看java进程的PID"><a href="#查看java进程的PID" class="headerlink" title="查看java进程的PID"></a>查看java进程的PID</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jps -l</span><br></pre></td></tr></table></figure>
+
+<h1 id="NMT常用命令【java本地内存追踪】"><a href="#NMT常用命令【java本地内存追踪】" class="headerlink" title="NMT常用命令【java本地内存追踪】"></a>NMT常用命令【java本地内存追踪】</h1><p><strong>注：开启NMT会有5%－10%的性能损耗</strong><br>在启动命令中<strong>第一个参数位置</strong>设置<code>-XX:NativeMemoryTracking=detail</code>,必须是第一个，否则不生效。<br>然后在程序启动成功后，获取进程的 pid 然后执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jcmd &lt;pid&gt; VM.native_memory detail</span><br></pre></td></tr></table></figure>
+
+<h1 id="pmap常用命令【查看进程的内存映像信息】"><a href="#pmap常用命令【查看进程的内存映像信息】" class="headerlink" title="pmap常用命令【查看进程的内存映像信息】"></a>pmap常用命令【查看进程的内存映像信息】</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pmap -x pid</span><br><span class="line"></span><br><span class="line">输出：</span><br><span class="line">Address: 内存分配地址</span><br><span class="line"></span><br><span class="line">Kbytes:  实际分配的内存大小</span><br><span class="line"></span><br><span class="line">RSS:     程序实际占用的内存大小</span><br><span class="line"></span><br><span class="line">Mapping: 分配该内存的模块的名称</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="jstack常用命令【生成线程转储日志】"><a href="#jstack常用命令【生成线程转储日志】" class="headerlink" title="jstack常用命令【生成线程转储日志】"></a>jstack常用命令【生成线程转储日志】</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jstack &lt;pid&gt; </span><br></pre></td></tr></table></figure>
+
+
+<h1 id="jmap常用命令【生成堆转储日志】"><a href="#jmap常用命令【生成堆转储日志】" class="headerlink" title="jmap常用命令【生成堆转储日志】"></a>jmap常用命令【生成堆转储日志】</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jmap -dump:live,format=b,file=生成文件名.bin &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数查询"><a href="#参数查询" class="headerlink" title="参数查询"></a>参数查询</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 查看jvm所有可以设置的参数和当前值</span><br><span class="line">java -XX:+PrintFlagsFinal -version</span><br><span class="line"># 查看所有虚拟机相关设置</span><br><span class="line">java -XshowSettings:vm -version</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h2><p>以下参数可以在环境变量 <code>JAVA_TOOL_OPTIONS</code> 中进行设置，也可以运行时指定。在环境变量中进行设置，会应用到所有jvm实例。运行时指定只对当前运行的jvm实例有效。<strong>（多个参数用空格隔开）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#jvm设置容器感知</span><br><span class="line">-XX:+UseContainerSupport</span><br><span class="line">#jvm设置堆内存占比（MaxRAMPercentage不能小于25,小于25的比例按25计算）</span><br><span class="line">-XX:InitialRAMPercentage=40.0 -XX:MinRAMPercentage=20.0 -XX:MaxRAMPercentage=80.0</span><br><span class="line">#设置堆内存溢出日志输出(日志路径必须存在，jvm不会自己创建)</span><br><span class="line">-XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/data/logs/</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="jstat常用命令【查看内存统计】"><a href="#jstat常用命令【查看内存统计】" class="headerlink" title="jstat常用命令【查看内存统计】"></a>jstat常用命令【查看内存统计】</h1><p>格式：jstat [-命令选项] [pid] [间隔时间&#x2F;毫秒] [查询次数]</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 垃圾回收统计</span><br><span class="line">jstat -gc &lt;pid&gt;</span><br><span class="line"># 堆内存统计</span><br><span class="line">jstat -gccapacity &lt;pid&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>以下示例，假设java线程的 pid 为 2060</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">类加载统计：</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -class 2060</span><br><span class="line">Loaded  Bytes  Unloaded  Bytes     Time</span><br><span class="line"> 15756 17355.6        0     0.0      11.29</span><br><span class="line"></span><br><span class="line">Loaded:加载class的数量</span><br><span class="line">Bytes：所占用空间大小</span><br><span class="line">Unloaded：未加载数量</span><br><span class="line">Bytes:未加载占用空间</span><br><span class="line">Time：时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">编译统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -compiler 2060</span><br><span class="line">Compiled Failed Invalid   Time   FailedType FailedMethod</span><br><span class="line">    9142      1       0     5.01          1 org/apache/felix/resolver/ResolverImpl mergeCandidatePackages</span><br><span class="line"></span><br><span class="line">Compiled：编译数量。</span><br><span class="line">Failed：失败数量</span><br><span class="line">Invalid：不可用数量</span><br><span class="line">Time：时间</span><br><span class="line">FailedType：失败类型</span><br><span class="line">FailedMethod：失败的方法</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">垃圾回收统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gc 2060</span><br><span class="line"> S0C    S1C    S0U    S1U      EC       EU        OC         OU          MC     MU    CCSC      CCSU   YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line">20480.0 20480.0  0.0   13115.3 163840.0 113334.2  614400.0   436045.7  63872.0 61266.5  0.0    0.0      149    3.440   8      0.295    3.735</span><br><span class="line"></span><br><span class="line">S0C：第一个幸存区的大小</span><br><span class="line">S1C：第二个幸存区的大小</span><br><span class="line">S0U：第一个幸存区的使用大小</span><br><span class="line">S1U：第二个幸存区的使用大小</span><br><span class="line">EC：伊甸园区的大小</span><br><span class="line">EU：伊甸园区的使用大小</span><br><span class="line">OC：老年代大小</span><br><span class="line">OU：老年代使用大小</span><br><span class="line">MC：方法区大小</span><br><span class="line">MU：方法区使用大小</span><br><span class="line">CCSC:压缩类空间大小</span><br><span class="line">CCSU:压缩类空间使用大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">YGCT：年轻代垃圾回收消耗时间</span><br><span class="line">FGC：老年代垃圾回收次数</span><br><span class="line">FGCT：老年代垃圾回收消耗时间</span><br><span class="line">GCT：垃圾回收消耗总时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">堆内存统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gccapacity 2060</span><br><span class="line"> NGCMN    NGCMX     NGC     S0C     S1C       EC      OGCMN      OGCMX       OGC         OC          MCMN     MCMX      MC     CCSMN    CCSMX     CCSC    YGC    FGC</span><br><span class="line">204800.0 204800.0 204800.0 20480.0 20480.0 163840.0   614400.0   614400.0   614400.0   614400.0      0.0    63872.0  63872.0      0.0      0.0      0.0    149     8</span><br><span class="line"></span><br><span class="line">NGCMN：新生代最小容量</span><br><span class="line">NGCMX：新生代最大容量</span><br><span class="line">NGC：当前新生代容量</span><br><span class="line">S0C：第一个幸存区大小</span><br><span class="line">S1C：第二个幸存区的大小</span><br><span class="line">EC：伊甸园区的大小</span><br><span class="line">OGCMN：老年代最小容量</span><br><span class="line">OGCMX：老年代最大容量</span><br><span class="line">OGC：当前老年代大小</span><br><span class="line">OC: 同OGC，当前老年代大小</span><br><span class="line">MCMN:最小元数据容量</span><br><span class="line">MCMX：最大元数据容量</span><br><span class="line">MC：当前元数据空间大小</span><br><span class="line">CCSMN：最小压缩类空间大小</span><br><span class="line">CCSMX：最大压缩类空间大小</span><br><span class="line">CCSC：当前压缩类空间大小</span><br><span class="line">YGC：年轻代gc次数</span><br><span class="line">FGC：老年代GC次数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">新生代垃圾回收统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcnew 7172</span><br><span class="line"> S0C    S1C    S0U    S1U   TT MTT  DSS      EC       EU     YGC     YGCT</span><br><span class="line">40960.0 40960.0 25443.1    0.0 15  15 20480.0 327680.0 222697.8     12    0.736</span><br><span class="line"></span><br><span class="line">S0C：第一个幸存区大小</span><br><span class="line">S1C：第二个幸存区的大小</span><br><span class="line">S0U：第一个幸存区的使用大小</span><br><span class="line">S1U：第二个幸存区的使用大小</span><br><span class="line">TT:对象在新生代存活的次数</span><br><span class="line">MTT:对象在新生代存活的最大次数</span><br><span class="line">DSS:期望的幸存区大小</span><br><span class="line">EC：伊甸园区的大小</span><br><span class="line">EU：伊甸园区的使用大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">YGCT：年轻代垃圾回收消耗时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">新生代内存统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcnewcapacity 7172</span><br><span class="line">  NGCMN      NGCMX       NGC      S0CMX     S0C     S1CMX     S1C       ECMX        EC      YGC   FGC</span><br><span class="line">  409600.0   409600.0   409600.0  40960.0  40960.0  40960.0  40960.0   327680.0   327680.0    12     0</span><br><span class="line"></span><br><span class="line">NGCMN：新生代最小容量</span><br><span class="line">NGCMX：新生代最大容量</span><br><span class="line">NGC：当前新生代容量</span><br><span class="line">S0CMX：最大幸存1区大小</span><br><span class="line">S0C：当前幸存1区大小</span><br><span class="line">S1CMX：最大幸存2区大小</span><br><span class="line">S1C：当前幸存2区大小</span><br><span class="line">ECMX：最大伊甸园区大小</span><br><span class="line">EC：当前伊甸园区大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">FGC：老年代回收次数</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">老年代垃圾回收统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcold 7172</span><br><span class="line">   MC       MU      CCSC     CCSU       OC          OU       YGC    FGC    FGCT     GCT</span><br><span class="line"> 33152.0  31720.8      0.0      0.0    638976.0    184173.0     12     0    0.000    0.736</span><br><span class="line"></span><br><span class="line">MC：方法区大小</span><br><span class="line">MU：方法区使用大小</span><br><span class="line">CCSC:压缩类空间大小</span><br><span class="line">CCSU:压缩类空间使用大小</span><br><span class="line">OC：老年代大小</span><br><span class="line">OU：老年代使用大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">FGC：老年代垃圾回收次数</span><br><span class="line">FGCT：老年代垃圾回收消耗时间</span><br><span class="line">GCT：垃圾回收消耗总时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">老年代内存统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcoldcapacity 7172</span><br><span class="line">   OGCMN       OGCMX        OGC         OC       YGC   FGC    FGCT     GCT</span><br><span class="line">   638976.0    638976.0    638976.0    638976.0    12     0    0.000    0.736</span><br><span class="line"></span><br><span class="line">OGCMN：老年代最小容量</span><br><span class="line">OGCMX：老年代最大容量</span><br><span class="line">OGC：当前老年代大小</span><br><span class="line">OC：老年代大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">FGC：老年代垃圾回收次数</span><br><span class="line">FGCT：老年代垃圾回收消耗时间</span><br><span class="line">GCT：垃圾回收消耗总时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">元数据空间统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcmetacapacity 7172</span><br><span class="line">   MCMN       MCMX        MC       CCSMN      CCSMX       CCSC     YGC   FGC    FGCT     GCT</span><br><span class="line">   0.0    33152.0    33152.0        0.0        0.0        0.0    12     0    0.000    0.736</span><br><span class="line"></span><br><span class="line">MCMN:最小元数据容量</span><br><span class="line">MCMX：最大元数据容量</span><br><span class="line">MC：当前元数据空间大小</span><br><span class="line">CCSMN：最小压缩类空间大小</span><br><span class="line">CCSMX：最大压缩类空间大小</span><br><span class="line">CCSC：当前压缩类空间大小</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">FGC：老年代垃圾回收次数</span><br><span class="line">FGCT：老年代垃圾回收消耗时间</span><br><span class="line">GCT：垃圾回收消耗总时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">总结垃圾回收统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -gcutil 7172</span><br><span class="line">  S0     S1     E      O      M     CCS    YGC     YGCT    FGC    FGCT     GCT</span><br><span class="line"> 62.12   0.00  81.36  28.82  95.68      -     12    0.736     0    0.000    0.736</span><br><span class="line"></span><br><span class="line">S0：幸存1区当前使用比例</span><br><span class="line">S1：幸存2区当前使用比例</span><br><span class="line">E：伊甸园区使用比例</span><br><span class="line">O：老年代使用比例</span><br><span class="line">M：元数据区使用比例</span><br><span class="line">CCS：压缩使用比例</span><br><span class="line">YGC：年轻代垃圾回收次数</span><br><span class="line">FGC：老年代垃圾回收次数</span><br><span class="line">FGCT：老年代垃圾回收消耗时间</span><br><span class="line">GCT：垃圾回收消耗总时间</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">JVM编译方法统计</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">C:\Users\Administrator&gt;jstat -printcompilation 7172</span><br><span class="line">Compiled  Size  Type Method</span><br><span class="line">    4608     16    1 org/eclipse/emf/common/util/SegmentSequence$SegmentSequencePool$SegmentsAccessUnit reset</span><br><span class="line"></span><br><span class="line">Compiled：最近编译方法的数量</span><br><span class="line">Size：最近编译方法的字节码数量</span><br><span class="line">Type：最近编译方法的编译类型。</span><br><span class="line">Method：方法名标识。</span><br></pre></td></tr></table></figure>
+
+
+<h1 id="jvm故障分析及性能优化相关参考资料"><a href="#jvm故障分析及性能优化相关参考资料" class="headerlink" title="jvm故障分析及性能优化相关参考资料"></a>jvm故障分析及性能优化相关参考资料</h1><p><a target="_blank" rel="noopener" href="https://www.javatang.com/archives/2017/10/19/33151873.html">JVM故障分析及性能优化系列文章</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/wA3pUemz5oWJX6Zp9HFIGA">Java 的线程到底占用了多少内存</a></p>
+<h2 id="jstat命令详解"><a href="#jstat命令详解" class="headerlink" title="jstat命令详解"></a>jstat命令详解</h2><p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/123079b47670">https://www.jianshu.com/p/123079b47670</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/70b94976dd1e">https://www.jianshu.com/p/70b94976dd1e</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/sxdcgaq8080/p/11089841.html">https://www.cnblogs.com/sxdcgaq8080/p/11089841.html</a></p>
+<h2 id="java命令更多运行参数"><a href="#java命令更多运行参数" class="headerlink" title="java命令更多运行参数"></a>java命令更多运行参数</h2><p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABHDABI">https://docs.oracle.com/javase/8/docs/technotes/tools/unix/java.html#BABHDABI</a></p>
 <p>（完）</p>
 
       
@@ -548,7 +526,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">redis</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">jvm</a>
         		</li>
       		
 		</ul>
@@ -558,7 +536,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/10/03/181003-redis/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/26/211119-jvm-use/">展开全文 >></a>
         </p>
       
 
@@ -588,114 +566,35 @@
 
 
   
-    <article id="post-180506-java-random" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-211119-innoSetup-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/06/180506-java-random/">【转】java生成随机数</a>
+      <a class="article-title" href="/2022/10/26/211119-innoSetup-use/">innoSetup使用说明</a>
     </h1>
   
 
         
-        <a href="/2018/05/06/180506-java-random/" class="archive-article-date">
-  	<time datetime="2018-05-06T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-06</time>
+        <a href="/2022/10/26/211119-innoSetup-use/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:31:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>转自：</strong> <a target="_blank" rel="noopener" href="http://www.cnblogs.com/skywang12345/p/3341423.html">http://www.cnblogs.com/skywang12345/p/3341423.html</a></p>
-<p>本章先讲解Java随机数的几种产生方式，然后通过示例对其进行演示。</p>
-<p>广义上讲，Java中的随机数的有三种产生方式：<br>(01). 通过System.currentTimeMillis()来获取一个当前时间毫秒数的long型数字。<br>(02). 通过Math.random()返回一个0到1之间的double值。<br>(03). 通过Random类来产生一个随机数，这个是专业的Random工具类，功能强大。</p>
-        
-          <a class="article-more-a" href="/2018/05/06/180506-java-random/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">随机数</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">random</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/06/180506-java-random/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-180506-linux-xfce-mic" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/06/180506-linux-xfce-mic/">linux的xfce桌面打开麦克风</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/06/180506-linux-xfce-mic/" class="archive-article-date">
-  	<time datetime="2018-05-06T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-06</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>默认麦克风是禁用的。按以下方法开启。</p>
-<p>点击任务栏面板的“小喇叭”图标</p>
-<p>点击“Sound Settings”</p>
-<p>点击“输入设备”选项卡</p>
-<p>该选项卡有三个小图标“小喇叭，小锁，对号”<br>点击“小喇叭”图标，取消“麦克风静音”</p>
-<p>拖动下面的滚动条，将声音调到合适大小。</p>
+        <p>文件说明:</p>
+<p>innosetup-6.0.2.exe		安装程序<br>ChineseSimplified.isl	简体中文语言包</p>
+<p>innoSetup默认是英文界面,如果想要设置为中文,需手动安装语言包.</p>
+<p>语言包下载安装步骤:</p>
+<p>进入官网:<a target="_blank" rel="noopener" href="http://www.jrsoftware.org/files/istrans/">http://www.jrsoftware.org/files/istrans/</a></p>
+<p>选择左侧的”Translations”菜单</p>
+<p>在右侧的”Unofficial translations”列表中找到”Chinese (Simplified)”右键另存为进行下载(直接点会在浏览器中打开)</p>
+<p>将下载好的语言包文件放到innoSetup安装目录下的”Languages”目录即可</p>
+<p>使用教程参考:<a target="_blank" rel="noopener" href="https://www.cnblogs.com/benpaodejiandan/p/7081011.html">https://www.cnblogs.com/benpaodejiandan/p/7081011.html</a></p>
 <p>（完）</p>
 
       
@@ -710,11 +609,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">xfce</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">innoSetup</a>
         		</li>
       		
 		</ul>
@@ -724,7 +619,7 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/06/180506-linux-xfce-mic/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/26/211119-innoSetup-use/">展开全文 >></a>
         </p>
       
 
@@ -754,189 +649,67 @@
 
 
   
-    <article id="post-180505-linux-install" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+    <article id="post-211119-helm-install-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/05/180505-linux-install/">Linux软件安装方法</a>
+      <a class="article-title" href="/2022/10/26/211119-helm-install-use/">helm安装和常用命令</a>
     </h1>
   
 
         
-        <a href="/2018/05/05/180505-linux-install/" class="archive-article-date">
-  	<time datetime="2018-05-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-05</time>
+        <a href="/2022/10/26/211119-helm-install-use/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:29:03.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>非root用户时，别忘了sudo.</p>
-<h2 id="Debian系"><a href="#Debian系" class="headerlink" title="Debian系"></a>Debian系</h2><p>从软件仓库中下载安装<br><code>apt-cache search packagename</code> 在软件仓库中搜索该软件<br><code>apt-get install packagename</code> 安装<br><code>apt-get -f install packagename</code> 修复安装<br><code>apt-get install packagename --reinstall</code> 重新安装<br><code>apt-get remove packagename</code> 卸载<br><code>apt-get remove packagename --purge</code> 卸载，包括删除配置文件等</p>
-<p>安装下载至本地的deb包<br><code>dpkg -i packagename.deb </code> 安装<br><code>dpkg -r packagename</code> 卸载<br><code>dpkg -P packagename</code> 卸载，包括删除配置文件等<br>也可以使用上面<code>apt-get remove</code>的方式卸载，都可以</p>
-        
-          <a class="article-more-a" href="/2018/05/05/180505-linux-install/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/05/180505-linux-install/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-180505-shadowsocks" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/05/180505-shadowsocks/">Linux安装shadowsocks</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/05/180505-shadowsocks/" class="archive-article-date">
-  	<time datetime="2018-05-05T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p><code>sudo apt-get install shadowsocks</code><br>安装完成后根据情况，按照下面的步骤选择配置为客户端或服务端。</p>
-<h2 id="配置为客户端"><a href="#配置为客户端" class="headerlink" title="配置为客户端"></a>配置为客户端</h2><p><code>sudo dpkg -L shadowsocks</code> 查看一下<code>config.json</code>(高版本)或<code>shadowsocks.json</code>（低版本）配置文件的位置。<br><code>sudo vim /etc/shadowsocks/config.json</code> 编辑配置文件，大致如下：</p>
-        
-          <a class="article-more-a" href="/2018/05/05/180505-shadowsocks/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">linux</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">shadowsocks</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/05/180505-shadowsocks/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-180415-kiddie-ride" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/04/15/180415-kiddie-ride/">摇摇车去除投币器</a>
-    </h1>
-  
-
-        
-        <a href="/2018/04/15/180415-kiddie-ride/" class="archive-article-date">
-  	<time datetime="2018-04-15T07:32:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-04-15</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>偶然购得二手摇摇车一辆，放在家里用，但是每次都要投币好麻烦，于是就想着把投币器去掉。摇摇车用的是“美杰心 8+4接口”的控制器，在网上搜了一下没有找到该控制器对应的资料。投币器有一组连接线，共三根，一黄一白一红，关键点肯定是在这三根线上。后经过一系列的措施试验后的结果是：</p>
-<p><strong>将控制器链接至投币器的这组线剪断，将白线和黄线碰一下就可以启动摇摇车</strong></p>
-<p><strong>猜测：</strong><br>在这组线中，红线为电源线——主要为投币器供电，用来投币时显示投币金额用，不接投币器的话，这根线就没啥用。<br>黄线和白线为信号线，当这两根线链接时，会向控制器发送一个启动信号。</p>
-<p><strong>求证：</strong><br>因为不懂电路，乱猜怕搞坏了小车，又没有在网上找到相关资料，于是在淘宝上找到了一家卖控制器的卖家，请教求证了一下，证实以上猜想是对的，另卖家好心告诫不要让两根信号线长时间接在一起，否则会对控制器造成损害，建议自己买一个小开关接上，非常感谢这位好心的大哥，祝生意兴隆！</p>
+        <h1 id="安装helm"><a href="#安装helm" class="headerlink" title="安装helm"></a>安装helm</h1><ol>
+<li>访问helm的github发布地址，下载最新的发布版本：<a target="_blank" rel="noopener" href="https://github.com/helm/helm/releases">https://github.com/helm/helm/releases</a></li>
+<li>解压(tar -zxvf helm-v3.0.0-linux-amd64.tar.gz)</li>
+<li>在解压目中找到helm程序，移动到<code>/usr/local/bin</code>目录中(mv linux-amd64&#x2F;helm &#x2F;usr&#x2F;local&#x2F;bin&#x2F;helm)</li>
+<li>安装完成。执行<code>helm help</code>显示帮助，代表安装成功。</li>
+</ol>
+<p>其它安装方式，可参考：<a target="_blank" rel="noopener" href="https://helm.sh/zh/docs/intro/install/">https://helm.sh/zh/docs/intro/install/</a></p>
+<h1 id="增、删、改、查仓库"><a href="#增、删、改、查仓库" class="headerlink" title="增、删、改、查仓库"></a>增、删、改、查仓库</h1><ul>
+<li>增加仓库<code>helm repo add 仓库名称 仓库地址</code></li>
+<li>删除仓库<code>helm repo remove 仓库名</code></li>
+<li>更新仓库<code>helm repo update</code></li>
+<li>查看所有已安装仓库<code>helm repo list</code></li>
+</ul>
+<h1 id="查找chart"><a href="#查找chart" class="headerlink" title="查找chart"></a>查找chart</h1><ul>
+<li>在官方仓库中搜索chart包<br><code>helm search hub 包名</code> # 包名支持模糊搜索</li>
+<li>在个人添加的仓库中搜索chart包<br><code>helm search repo 包名</code>  # 搜索已经(用 helm repo add)加入到本地helm客户端的仓库。该命令只搜索本地数据，不需要连接网络。</li>
+</ul>
+<h1 id="下载chart"><a href="#下载chart" class="headerlink" title="下载chart"></a>下载chart</h1><p><code>helm fetch 包名</code>  </p>
+<h1 id="安装发布chart到k8s"><a href="#安装发布chart到k8s" class="headerlink" title="安装发布chart到k8s"></a>安装发布chart到k8s</h1><ul>
+<li>通过helm仓库在线安装发布<br><code>helm install 发布名 包名</code> # 如：<code>helm install happy-panda stable/mariadb</code> 安装 mariadb 并发布到k8s集群，发布名称为 happy-panda 。</li>
+<li>通过本地chart包安装<br><code>helm install 发布名 压缩包路径</code> # 如 <code>helm install foo foo-0.1.1.tgz</code></li>
+<li>通过解压的chart目录安装<br><code>helm install 发布名 解压目录路径</code> # 如 <code>helm install foo path/to/foo</code></li>
+<li>通过URL在线安装<br><code>helm install 发布名 URL地址</code> # 如 <code>helm install foo https://example.com/charts/foo-1.2.3.tgz</code></li>
+</ul>
+<p>在命令中添加<code>--debug --dry-run</code>可以debug试运行。并不会发布到k8s。 </p>
+<h1 id="安装chart时自定义参数"><a href="#安装chart时自定义参数" class="headerlink" title="安装chart时自定义参数"></a>安装chart时自定义参数</h1><p>安装时有两种方式传递配置数据：</p>
+<ul>
+<li>–values (或-f)：指定一个重写的YAML文件。可以指定多个，最右边的文件优先。如：<code>helm install happy-panda -f custom-value.cnf stable/mariadb</code></li>
+<li>–set: 使用命令行指定覆盖内容。多行可以使用<code>,</code>分隔，如：<code>helm install happy-panda  --set a=b,c=d stable/mariadb</code></li>
+</ul>
+<h1 id="跟踪chart的发布状态"><a href="#跟踪chart的发布状态" class="headerlink" title="跟踪chart的发布状态"></a>跟踪chart的发布状态</h1><p><code>helm status 发布名称</code></p>
+<h1 id="查看所有的发布"><a href="#查看所有的发布" class="headerlink" title="查看所有的发布"></a>查看所有的发布</h1><p><code>helm list</code> # 查看当前命名空间所有的发布<br><code>helm list --namespace=name1</code> # 查看 name1 命名空间所有的发布</p>
+<h1 id="升级chart"><a href="#升级chart" class="headerlink" title="升级chart"></a>升级chart</h1><p>当chart新版本发布时，或者您想改变发布的配置，可以使用 helm upgrade 命令。如：</p>
+<p><code>helm upgrade -f panda.yaml happy-panda stable/mariadb</code>  </p>
+<p>上面这个例子中，happy-panda 发布使用了同样的chart升级，但用了一个新的YAML文件。每次升级版本号将加1，新版本将使用新文件中指定的参数。我们可以使用 <code>helm get values</code> 查看新内容是否生效。</p>
+<h1 id="回滚chart"><a href="#回滚chart" class="headerlink" title="回滚chart"></a>回滚chart</h1><ul>
+<li>查看某个发布的所有版本<br><code>helm history happy-panda</code> # 查看 happy-panda 发布的所有版本</li>
+<li>回滚发布到一个指定的版本<br><code>helm rollback happy-panda 1</code> # 回滚 happy-panda 到版本 1</li>
+</ul>
+<h1 id="卸载一个发布"><a href="#卸载一个发布" class="headerlink" title="卸载一个发布"></a>卸载一个发布</h1><p><code>helm uninstall happy-panda</code> # 卸载 happy-panda </p>
+<p>更多详情可参考：<br>官方文档：<a target="_blank" rel="noopener" href="https://helm.sh/zh/docs/">https://helm.sh/zh/docs/</a><br>用户指南：<a target="_blank" rel="noopener" href="https://whmzsu.github.io/helm-doc-zh-cn/">https://whmzsu.github.io/helm-doc-zh-cn/</a></p>
 <p>（完）</p>
 
       
@@ -951,7 +724,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">摇摇车</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">helm</a>
         		</li>
       		
 		</ul>
@@ -961,7 +734,546 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/04/15/180415-kiddie-ride/">展开全文 >></a>
+          <a class="article-more-a" href="/2022/10/26/211119-helm-install-use/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-211119-harbor-update-ca" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/26/211119-harbor-update-ca/">harbor更新证书</a>
+    </h1>
+  
+
+        
+        <a href="/2022/10/26/211119-harbor-update-ca/" class="archive-article-date">
+  	<time datetime="2022-10-26T08:10:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="首先创建证书存放目录-并进入该目录："><a href="#首先创建证书存放目录-并进入该目录：" class="headerlink" title="首先创建证书存放目录,并进入该目录："></a>首先创建证书存放目录,并进入该目录：</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /data/cert &amp;&amp; cd /data/cert</span><br></pre></td></tr></table></figure>
+
+<h3 id="创建-CA-根证书（ca-key-ca私钥-和ca-crt-ca证书-）"><a href="#创建-CA-根证书（ca-key-ca私钥-和ca-crt-ca证书-）" class="headerlink" title="创建 CA 根证书（ca.key[ca私钥]和ca.crt[ca证书]）"></a>创建 CA 根证书（ca.key[ca私钥]和ca.crt[ca证书]）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req  -newkey rsa:4096 -nodes -sha256 -keyout ca.key -x509 -days 3650 -out ca.crt -subj &quot;/C=CN/L=Beijing/O=pkcfwd/CN=harbor-pkcfwd&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成一个证书签名请求-设置访问域名为-harbor-pkcfwd-com（harbor-pkcfwd-com-key-域名所代表的服务私钥-和harbor-pkcfwd-com-csr-域名所代表的服务请求文件-）"><a href="#生成一个证书签名请求-设置访问域名为-harbor-pkcfwd-com（harbor-pkcfwd-com-key-域名所代表的服务私钥-和harbor-pkcfwd-com-csr-域名所代表的服务请求文件-）" class="headerlink" title="生成一个证书签名请求, 设置访问域名为 harbor.pkcfwd.com（harbor.pkcfwd.com.key[域名所代表的服务私钥]和harbor.pkcfwd.com.csr[域名所代表的服务请求文件]）"></a>生成一个证书签名请求, 设置访问域名为 harbor.pkcfwd.com（harbor.pkcfwd.com.key[域名所代表的服务私钥]和harbor.pkcfwd.com.csr[域名所代表的服务请求文件]）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -newkey rsa:4096 -nodes -sha256 -keyout harbor.pkcfwd.com.key -out harbor.pkcfwd.com.csr -subj &quot;/C=CN/L=Beijing/O=yhwt/CN=harbor.pkcfwd.com&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成harbor-pkcfwd-com服务的证书（需要ca证书、ca私钥、服务签名请求共同生成）"><a href="#生成harbor-pkcfwd-com服务的证书（需要ca证书、ca私钥、服务签名请求共同生成）" class="headerlink" title="生成harbor.pkcfwd.com服务的证书（需要ca证书、ca私钥、服务签名请求共同生成）"></a>生成harbor.pkcfwd.com服务的证书（需要ca证书、ca私钥、服务签名请求共同生成）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -req -days 3650 -in harbor.pkcfwd.com.csr -CA ca.crt -CAkey ca.key -CAcreateserial -out harbor.pkcfwd.com.crt</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置证书到harbor"><a href="#配置证书到harbor" class="headerlink" title="配置证书到harbor"></a>配置证书到harbor</h3><p>进入k8s的harbor所在命名空间，找到名称为<code>harbor-harbor-ingress</code>的<code>secret</code>配置,将<code>harbor.pkcfwd.com.crt</code>的内容粘贴到<code>tls.crt</code>,将<code>harbor.pkcfwd.com.key</code>的内容粘贴到<code>tls.key</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 查看harbor.pkcfwd.com.crt的内容</span><br><span class="line">cat harbor.pkcfwd.com.crt</span><br><span class="line"># 查看harbor.pkcfwd.com.key的内容</span><br><span class="line">cat harbor.pkcfwd.com.key</span><br></pre></td></tr></table></figure>
+
+<p><strong>最后</strong>将harbor.pkcfwd.com.crt复制到需要访问harbor的主机,放入其域名对应的docker证书目录即可。如：<code>cd /etc/docker/certs.d/harbor.pkcfwd.com/</code></p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">harbor</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/10/26/211119-harbor-update-ca/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-211118-centos7-firewall" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/26/211118-centos7-firewall/">centos7防火墙相关操作firewall</a>
+    </h1>
+  
+
+        
+        <a href="/2022/10/26/211118-centos7-firewall/" class="archive-article-date">
+  	<time datetime="2022-10-26T06:39:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p> 一、防火墙的开启、关闭、禁用命令</p>
+<p>（1）设置开机启用防火墙：systemctl enable firewalld.service</p>
+<p>（2）设置开机禁用防火墙：systemctl disable firewalld.service</p>
+<p>（3）启动防火墙：systemctl start firewalld</p>
+<p>（4）关闭防火墙：systemctl stop firewalld</p>
+<p>（5）检查防火墙状态：systemctl status firewalld </p>
+<p>二、使用firewall-cmd配置端口</p>
+<p>（1）查看防火墙状态：firewall-cmd –state</p>
+<p>（2）重新加载配置：firewall-cmd –reload</p>
+<p>（3）查看开放的端口：firewall-cmd –list-ports</p>
+<p>（4）开启防火墙端口：firewall-cmd –zone&#x3D;public –add-port&#x3D;9200&#x2F;tcp –permanent</p>
+<p>　　命令含义：</p>
+<p>　　–zone #作用域</p>
+<p>　　–add-port&#x3D;9200&#x2F;tcp #添加端口，格式为：端口&#x2F;通讯协议</p>
+<p>　　–permanent #永久生效，没有此参数重启后失效</p>
+<p>　　注意：添加端口后，必须用命令firewall-cmd –reload重新加载一遍才会生效</p>
+<p>（5）关闭防火墙端口：firewall-cmd –zone&#x3D;public –remove-port&#x3D;9200&#x2F;tcp –permanent</p>
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">centos</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">firewall</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/10/26/211118-centos7-firewall/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-191118-ca-tls" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/10/26/191118-ca-tls/">tls自制证书签发</a>
+    </h1>
+  
+
+        
+        <a href="/2022/10/26/191118-ca-tls/" class="archive-article-date">
+  	<time datetime="2022-10-26T06:02:35.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2022-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>自制CA证书，签发客户端，服务端证书</p>
+<h2 id="创建目录，并授权。"><a href="#创建目录，并授权。" class="headerlink" title="创建目录，并授权。"></a>创建目录，并授权。</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> ca</span><br><span class="line"><span class="built_in">chmod</span> 777 ca</span><br></pre></td></tr></table></figure>
+<p>进入<code>ca</code>目录。<code>cd ca</code></p>
+<h2 id="CA证书生成"><a href="#CA证书生成" class="headerlink" title="CA证书生成"></a>CA证书生成</h2><p>生成CA私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out ca.key 1024</span><br></pre></td></tr></table></figure>
+<p>生成CA请求文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -key ca.key -out ca.csr</span><br></pre></td></tr></table></figure>
+<p>生成CA自签发证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -days 365 -req -<span class="keyword">in</span> ca.csr -signkey ca.key -out ca.crt</span><br></pre></td></tr></table></figure>
+<p>其中 <code>-days 365</code>代表签发的证书有效期为365天。如果不设置该参数，默认为一个月。</p>
+<h2 id="server端证书签发"><a href="#server端证书签发" class="headerlink" title="server端证书签发"></a>server端证书签发</h2><p>生成服务端私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out server.key 1024</span><br></pre></td></tr></table></figure>
+
+<p>生成服务端公钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -<span class="keyword">in</span> server.key -pubout -out server.pem</span><br></pre></td></tr></table></figure>
+
+<p>生成server请求文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -key server.key -out server.csr</span><br></pre></td></tr></table></figure>
+
+<p>签发server端证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -days 365 -req -CA ca.crt -CAkey ca.key -CAcreateserial -<span class="keyword">in</span> server.csr -out server.crt</span><br></pre></td></tr></table></figure>
+
+<h2 id="client端证书签发"><a href="#client端证书签发" class="headerlink" title="client端证书签发"></a>client端证书签发</h2><p>生成客户端私钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out client.key 1024</span><br></pre></td></tr></table></figure>
+
+<p>生成客户端公钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl rsa -<span class="keyword">in</span> client.key -pubout -out client.pem</span><br></pre></td></tr></table></figure>
+
+<p>生成client请求文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -key client.key -out client.csr</span><br></pre></td></tr></table></figure>
+
+<p>签发client端证书</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -days 365 -req -CA ca.crt -CAkey ca.key -CAcreateserial -<span class="keyword">in</span> client.csr -out client.crt</span><br></pre></td></tr></table></figure>
+
+
+
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">tls</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">ca</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2022/10/26/191118-ca-tls/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-211119-network-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/26/211119-network-use/">计算机网络相关知识点</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/26/211119-network-use/" class="archive-article-date">
+  	<time datetime="2021-10-26T09:19:34.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个设备工作在哪一层，关键看它工作时利用哪一层的数据头部信息。网桥（交换机）工作时，是以MAC头部来决定转发端口的，因此显然它是数据链路层的设备。<br>路由器是根据IP地址进行的路由，因此它是网络层设备。</p>
+<p>广播域 是二层的概念，指的是mac帧的目的地址为全1，这样的广播帧能够影响的范围<br>ip网段 是三层的概念，如192.168.1.0&#x2F;24 192.168.2.0&#x2F;24 就分属两个ip网段</p>
+<p>二层交换机为二层设备，内部存有一张“MAC地址和交换机设备端口”的映射表。交换机不会去关心数据包中的IP信息，因为IP数据包属于第三层。交换机转发数据时只解析链路层（只解析MAC地址），MAC地址属于链路层地址中的一种。</p>
+<p>二层交换机只会处理以太网帧，换句话说，如果帧是广播帧，交换机肯定会转发泛洪，但如果不同ip网段，那么丢弃这个ip数据包的是主机，而不是交换机。 </p>
+<h1 id="二层广播："><a href="#二层广播：" class="headerlink" title="二层广播："></a>二层广播：</h1><p>广播帧的目的MAC地址为十六进制的FFFFFFFFFFFF，所有收到该广播帧的主机都要接收并处理这个帧。所有收到该广播帧的主机都要接收并处理这个帧。（交换机一般所发送的广播帧，目的MAC全为F）<br>二层广播针对MAC，指目的MAC地址为十六进制的FFFFFFFFFFFF的数据帧，为广播帧。</p>
+<p>泛洪：<br>有明确的目的MAC地址，但是该MAC地址在交换机的MAC地址表中找不到，此时交换机将从该接口收到的数据流，向除该接口之外的所有接口发送出去。目标主机收到后进行处理，其它主机丢弃。（有具体的目标MAC地址，但交换机在Mac地址表中找不到）</p>
+<h1 id="三层广播："><a href="#三层广播：" class="headerlink" title="三层广播："></a>三层广播：</h1><p>一般是路由传播。TCP&#x2F;IP协议栈中, 传输层只有UDP可以广播，只能对同一子网内部广播, 广播数据包不经过路由器。<br>192.168.1.255 一个网段内的广播<br>255.255.255.255 全网络广播<br>三层广播针对IP，指主机标识段host ID 为全1 的IP 地址为广播地址，广播的分组传送给host ID段所涉及的所有计算机。例如，对于10.1.1.0 （255.255.255.0 ）网段，其广播地址为10.1.1.255 （255 即为2 进制的11111111 ），当发出一个目的地址为10.1.1.255 的分组（封包）时，它将被分发给该网段上的所有计算机。详细介绍参考百度百科 <a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%B9%BF%E6%92%AD%E5%9C%B0%E5%9D%80">广播地址</a></p>
+<h1 id="组播："><a href="#组播：" class="headerlink" title="组播："></a>组播：</h1><p>第三种发送方式为组播，组播比广播更加高效。组播转发可以理解为选择性的广播，主机侦听特定组播地址，接收并处理目的MAC地址为该组播MAC地址的帧。</p>
+<p>组播MAC地址和单播MAC地址是通过第一字节中的第8个比特区分的。组播MAC地址的第8个比特为1，而单播MAC地址的第8个比特为0。</p>
+<p>当需要网络上的一组主机（而不是全部主机）接收相同信息，并且其他主机不受影响的情况下通常会使用组播方式。</p>
+<p>三层交换机等同于路由器。也就是说源ip和目的ip在数据包里一直不变（不经过nat的情况），mac地址将时刻改变。广播只存在二层。三层情况下是路由寻址。</p>
+<p>路由不是禁止广播，而是终结广播，就是说路由无法不禁止广播。</p>
+<p>vlan划分隔离的是vlan之间的广播，同一二层内广播依就，意思是vlan仅仅是将管理目标划分成不同的二层区域。</p>
+<p>二层广播是因为不知道目标而产生的，属于被动产生；三层广播是因为应用的需要而主动进行的，是两个概念。当然，他们都不会跨越路由。</p>
+<p>凡是能够接收到一个广播范围的区域叫做广播域，也就是说一个二层范围就是一个广播域。（因为到了三层就到路由器了，而路由器终结广播，所以说一个二层范围就是一个广播域，不知道这么理解对不对）</p>
+<h1 id="四层交换机"><a href="#四层交换机" class="headerlink" title="四层交换机"></a>四层交换机</h1><p>第四层交换机是基于传输层数据包的交换过程的，是一类基于TCP&#x2F;IP协议应用层的用户应用交换需求的新型局域网交换机。第四层交换机支持TCP&#x2F;UDP第四层以下的所有协议，可识别至少80个字节的数据包包头长度，可根据TCP&#x2F;UDP端口号来区分数据包的应用类型，从而实现应用层的访问控制和服务质量保证。所以，与其说第四层交换机是硬件网络设备，还不如说它是软件网络管理系统。也就是说，第四层交换机是一类以软件技术为主，以硬件技术为辅的网络管理交换设备。<br>我们说第四层交换机基于第四层数据包交换，这是说它可以根据第四层TCP&#x2F;UDP端口号来分析数据包应用类型，即第四层交换机不仅完全具备第三层交换机的所有交换功能和性能，还能支持第三层交换机不可能拥有的网络流量和服务质量控制的智能型功能。</p>
+<h1 id="IP地址主机号全0和全1："><a href="#IP地址主机号全0和全1：" class="headerlink" title="IP地址主机号全0和全1："></a>IP地址主机号全0和全1：</h1><p>主机号全0，即最后一段全为二进制0，如：192.168.1.0，代表一个网段。<br>主机号全1，即最后一段全为二进制1，如：192.168.1.255，如果子网掩码为255.255.255.0，则代表 192.168.1.0&#x2F;24 网段的广播地址。</p>
+<h1 id="子网掩码："><a href="#子网掩码：" class="headerlink" title="子网掩码："></a>子网掩码：</h1><p>IP  地址：192.168.1.199       ‐＞11000000.10101000.00000001.11000111<br>子网掩码：255.255.255.0       ‐＞11111111.11111111.11111111.00000000<br>十进制的显示形式是给人看的，二进制的显示形式是给计算机看的。。。子网掩码的左边是网络位，用二进制数字“1”表示，1的数目等于网络位的长度；右边是主机位，用二进制数字“0”表示，0的数目等于主机位的长度。 例如上面的子网掩码255.255.255.0的  “1”的个数是左边24位，则对应IP地址左边的位数也是24位;即可用192.168.1.0&#x2F;24表示，其中24代表网络位的个数。其余为主机位。<br>详细可参考 <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/56895036">如何理解子网掩码</a></p>
+<h1 id="子网网段划分"><a href="#子网网段划分" class="headerlink" title="子网网段划分"></a>子网网段划分</h1><h2 id="求某网段内的网络地址"><a href="#求某网段内的网络地址" class="headerlink" title="求某网段内的网络地址"></a>求某网段内的网络地址</h2><p>将IP地址和子网掩码换算为二进制，子网掩码在二进制表现形式下，其中全为1的二进制位是网络位，全为0的二进制位是主机位。然后两者进行与运算，计算结果就是是<strong>网络地址</strong>。<br><strong>网络地址代表该网段的起始地址</strong>。</p>
+<h2 id="求某网段内的广播地址"><a href="#求某网段内的广播地址" class="headerlink" title="求某网段内的广播地址"></a>求某网段内的广播地址</h2><p>先求出网段的网络地址，二进制表现形式下，网络地址中的网络位部分保持不变，主机位变为全1，结果就是该网段的<strong>广播地址</strong>。<br><strong>广播地址代表该网段的结束地址</strong>。</p>
+<h2 id="求某网段内的最大主机数"><a href="#求某网段内的最大主机数" class="headerlink" title="求某网段内的最大主机数"></a>求某网段内的最大主机数</h2><ol>
+<li>先得出子网掩码在二进制表现形式下，全为1的二进制位是网络位，全0的二进制位是主机位。此处能得出有几个二进制位是主机位。假设有n位。</li>
+<li>2的n次方就是该网段能划分的最大主机数。然后减去2（减2是减去一个网络地址和一个广播地址.如 192.168.1.0&#x2F;24 网段的网络地址为：192.168.1.0广播地址为：192.168.1.255）。<br>或者还有一个简单的方法，如果已知网络地址和广播地址，那么这两者之间相减，就是该网段最大主机数。</li>
+</ol>
+<h2 id="关于网络IP的CIDR写法（无类别域间路由，Classless-Inter-Domain-Routing）"><a href="#关于网络IP的CIDR写法（无类别域间路由，Classless-Inter-Domain-Routing）" class="headerlink" title="关于网络IP的CIDR写法（无类别域间路由，Classless Inter-Domain Routing）"></a>关于网络IP的CIDR写法（无类别域间路由，Classless Inter-Domain Routing）</h2><p>CIDR 地址中斜杠前代表标准的32位IP地址斜杠后表示该网段的网络前缀位数的信息。以CIDR地址222.80.18.18&#x2F;25为例，其中“&#x2F;25”表示其前面地址中的前25位代表网络部分，其余位代表主机部分。<br>如：192.168.1.0&#x2F;24 斜杠后面的数字是代表该地址在二进制表现形式下网路位的位数是24位。</p>
+<h1 id="子网掩码、网段、主机数、计算方法"><a href="#子网掩码、网段、主机数、计算方法" class="headerlink" title="子网掩码、网段、主机数、计算方法"></a>子网掩码、网段、主机数、计算方法</h1><p>详情参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/yinshitaoyuan/article/details/51782330">https://blog.csdn.net/yinshitaoyuan/article/details/51782330</a></p>
+<p>1、利用子网数目计算子网掩码</p>
+<p>把B类地址172.16.0.0划分成30个子网络，它的子网掩码是多少？</p>
+<p>①将子网络数目30转换成二进制表示11110</p>
+<p>②统计一下这个二进制的数共有5位</p>
+<p>③注意：当二进制数中只有一个1的时候，所统计的位数需要减1（例如：10000要统计为4位）</p>
+<p>④将B类地址的子网掩码255.255.0.0主机地址部分的前5位变成1</p>
+<p>⑤这就得到了所要的子网掩码（11111111.11111111.11111000.00000000）255.255.248.0。</p>
+<p>2、利用主机数目计算子网掩码</p>
+<p>把B类地址172.16.0.0划分成若干子网络，每个子网络能容纳500台主机，它的子网掩码是多少？</p>
+<p>①把500转换成二进制表示111110100</p>
+<p>②统计一下这个二进制的数共有9位</p>
+<p>③将子网掩码255.255.255.255从后向前的9位变成0</p>
+<p>④这就得到了所要的子网掩码（11111111.11111111.11111110.00000000）255.255.254.0。</p>
+<p>3、利用子网掩码计算最大有效子网数</p>
+<p>A类IP地址，子网掩码为255.224.0.0，它所能划分的最大有效子网数是多少？</p>
+<p>①将子网掩码转换成二进制表示11111111.11100000.00000000.00000000</p>
+<p>②统计一下它的网络位共有11位</p>
+<p>③A类地址网络位的基础数是8，二者之间的位数差是3</p>
+<p>④最大有效子网数就是2的3次方，即最多可以划分8个子网络。</p>
+<p>4、利用子网掩码计算最大可用主机数</p>
+<p>A类IP地址，子网掩码为255.252.0.0，将它划分成若干子网络，每个子网络中可用主机数有多少？</p>
+<p>①将子网掩码转换成二进制表示11111111.11111100.00000000.00000000</p>
+<p>②统计一下它的主机位共有18位</p>
+<p>③最大可用主机数就是2的18次方减2（除去全是0的网络地址和全是1广播地址），即每个子网络最多有262142台主机可用。</p>
+<p>5、利用子网掩码确定子网络的起止地址</p>
+<p>B类IP地址172.16.0.0，子网掩码为255.255.192.0，它所能划分的子网络起止地址是多少？</p>
+<p>①利用子网掩码计算，最多可以划分4个子网络</p>
+<p>②利用子网掩码计算，每个子网络可容纳16384台主机（包括网络地址和广播地址）</p>
+<p>③用16384除以256（网段内包括网络地址和广播地址的全部主机数），结果是64</p>
+<p>④具体划分网络起止方法如下：</p>
+<p>172.16.0.0～172.16.63.255</p>
+<p>172.16.64.0～172.16.127.255</p>
+<p>172.16.128.0～172.16.191.255</p>
+<p>172.16.192.0～172.16.255.255</p>
+<p>6、以下是资深人士经验总结的关系表</p>
+<p>A类IP地址段：1.0.0.0～126.255.255.255 私有地址段：10.0.0.0～10.255.255.255<br>B类IP地址段：128.0.0.0～191.255.255.255 私有地址段：172.16.0.0～172.31.255.255<br>C类IP地址段：192.0.0.0～223.255.255.255 私有地址段：192.168.0.0～192.168.255.255</p>
+<h1 id="不同网段通信："><a href="#不同网段通信：" class="headerlink" title="不同网段通信："></a>不同网段通信：</h1><p>在没有路由器的情况下，两个网段之间是不能进行TCP&#x2F;IP通信的，即使是两个网络连接在同一台交换机（或集线器）上，基于TCP&#x2F;IP协议发送数据时，发送端主机会根据子网掩码（255.255.255.0）与远程主机的IP 地址作 “与” 运算来判定两个主机是否处于相同的网段里。要实现两个网段之间的通信，必须通过网关。<br>比如有网络A和网络B，网络A的IP地址范围为“192.168.1.1<del>192. 168.1.254”，子网掩码为255.255.255.0；网络B的IP地址范围为“192.168.2.1</del>192.168.2.254”，子网掩码为255.255.255.0<br>如果网络A中的主机发现数据包的目的主机不在本网段中，就把数据包转发给它自己的网关，再由网关转发给网络B的网关，网络B的网关再转发给网络B的某个主机。</p>
+<p>如果目的IP地址显示不是同一网段的，那么A要实现和B的通讯，在路由缓存条目中没有对应MAC地址条目，就将第一个正常数据包发送向一个缺省网关，这个缺省网关一般在操作系统中已经设好，对应第三层路由模块，所以可见对于不是同一子网的数据，最先在MAC表中放的是缺省网关的MAC地址；然后就由三层模块接收到此数据包，查询路由表以确定到达B的路由，将构造一个新的帧头，其中以缺省网关的MAC地址为源MAC地址，以主机B的MAC地址为目的MAC地址。通过一定的识别触发机制，确立主机A与B的MAC地址及转发端口的对应关系，并记录进流缓存条目表，以后的A到B的数据，就直接交由二层交换模块完成。这就通常所说的一次路由多次转发。</p>
+<h1 id="相同网段通信："><a href="#相同网段通信：" class="headerlink" title="相同网段通信："></a>相同网段通信：</h1><p>比如A要给B发送数据，如果在同一网段，但A不知道B的MAC地址，A就发送一个ARP请求，交换机查MAC表，有则返回，无则泛洪。B收到ARP请求后，返回其MAC地址，A用此MAC封装数据包并发送给交换机，交换机启用二层交换模块，查找MAC地址表，将数据包转发到相应的端口。</p>
+<h1 id="网关："><a href="#网关：" class="headerlink" title="网关："></a>网关：</h1><p>网关(Gateway)又称网间连接器、协议转换器。网关在传输层以上实现网络互连，是最复杂的网络互连设备，仅用于两个高层协议不同的网络互连。网关的结构也和路由器类似，不同的是互连层。网关既可以用于广域网互连，也可以用于局域网互连。 <strong>网关是一种充当转换重任的计算机系统或设备。</strong>在使用不同的通信协议、数据格式或语言，甚至体系结构完全不同的两种系统之间，网关是一个翻译器。与网桥只是简单地传达信息不同，<strong>网关对收到的信息要重新打包，以适应目的系统的需求。</strong>同时，网关也可以提供过滤和安全功能。大多数网关运行在OSI 7层协议的顶层–应用层。</p>
+<p>顾名思义，网关(Gateway)就是一个网络连接到另一个网络的“关口”。在OSI中，网关有两种：一种是面向连接的网关，一种是无连接的网关。当两个子网之间有一定距离时，往往将一个网关分成两半，中间用一条链路连接起来，我们称之为半网关。</p>
+<p>按照不同的分类标准，网关也有不同种类。TCP&#x2F;IP协议里的网关是最常用的。</p>
+<h1 id="路由"><a href="#路由" class="headerlink" title="路由"></a>路由</h1><p>进行网络寻址和路径转发，工作在第三层网络层。</p>
+<h1 id="以太网、无线局域网（WLAN）、ADSL-区别"><a href="#以太网、无线局域网（WLAN）、ADSL-区别" class="headerlink" title="以太网、无线局域网（WLAN）、ADSL 区别"></a>以太网、无线局域网（WLAN）、ADSL 区别</h1>
+        
+          <a class="article-more-a" href="/2021/10/26/211119-network-use/#more">more >></a>
+        
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">网络</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/26/211119-network-use/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-211119-nginx-use" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2021/10/26/211119-nginx-use/">nginx常用命令</a>
+    </h1>
+  
+
+        
+        <a href="/2021/10/26/211119-nginx-use/" class="archive-article-date">
+  	<time datetime="2021-10-26T09:08:06.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2021-10-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>帮助命令：<code>nginx -h</code></p>
+<p>启动Nginx服务器 ：<code>sudo nginx</code></p>
+<p>查看进程： <code>ps aux | grep nginx</code></p>
+<p>配置文件路径：<code>/usr/local/nginx/conf/nginx.conf</code></p>
+<p>检查配置文件：<code>sudo nginx -t</code></p>
+<p>指定启动配置文件：<code>sudo nginx -c /usr/local/nginx/conf/nginx.conf</code></p>
+<p>暴力停止服务：<code>sudo nginx -s stop</code></p>
+<p>优雅停止服务：<code>sudo nginx -s quit</code></p>
+<p>重新加载配置文件：<code>sudo nginx -s reload</code></p>
+<h1 id="关于server中的listen和server-name"><a href="#关于server中的listen和server-name" class="headerlink" title="关于server中的listen和server_name"></a>关于server中的listen和server_name</h1><p>listen：指定server要匹配的IP和端口。（如果指定了IP那么server_name的配置会失效，通常只指定端口）。<br>server_name：指定server要匹配的域名（也可以写IP地址），每个server_name之间用空格隔开。</p>
+<h1 id="关于server中的location和proxy-pass带不带斜杠（-x2F-）的问题"><a href="#关于server中的location和proxy-pass带不带斜杠（-x2F-）的问题" class="headerlink" title="关于server中的location和proxy_pass带不带斜杠（&#x2F;）的问题"></a>关于server中的location和proxy_pass带不带斜杠（&#x2F;）的问题</h1><p>nginx转发时，<code>location</code>只是匹配规则，仅用来确定路径是否匹配，跟转发路径的拼接没有关系。<br>路径的拼接规则主要取决于<code>proxy_pass</code>指令中是否包含URI来决定。（URI是指一个请求去掉域名、IP、端口后，剩余的部分。如果去掉后还有字符串就表示包含URI）。</p>
+<p>分两种情况：</p>
+<ol>
+<li>如果<code>proxy_pass</code>指令包含URI，当请求经过服务器时，匹配到<code>location</code>的那部分URI将被<code>proxy_pass</code>指令中的URI代替 （最终拼接为：proxy_pass+(path-location)）</li>
+<li>如果<code>proxy_pass</code>指令不包含URI，当请求经过服务器时，原始客户端请求将直接拼接在<code>proxy_pass</code>之后 （最终拼接为：proxy_pass+path）</li>
+</ol>
+<p>以下这些<code>proxy_pass</code>都属于包含URI：<br><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/">http://127.0.0.1:8080/</a><br><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/app1">http://127.0.0.1:8080/app1</a><br><a target="_blank" rel="noopener" href="http://127.0.0.1:8080/app1/">http://127.0.0.1:8080/app1/</a></p>
+<p>详细的介绍和实验可参考：<br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yb38156/p/12173626.html">https://www.cnblogs.com/yb38156/p/12173626.html</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010433704/article/details/99945557">https://blog.csdn.net/u010433704/article/details/99945557</a></p>
+<h1 id="关于server代理本地静态资源root和alias的区别"><a href="#关于server代理本地静态资源root和alias的区别" class="headerlink" title="关于server代理本地静态资源root和alias的区别"></a>关于server代理本地静态资源root和alias的区别</h1><p>root的结尾带不带<code>/</code>都可以，没有影响。<br>alias的即为必须带<code>/</code>，否则无效。<br>root指的是静态资源所在的根目录(path的上一级目录)，按照<code>location</code>规则匹配成功的请求，路径最终拼接为（root+path），即：请求的URI资源会拼接在指定的root目录之后。<br>alias指的是<code>location</code>匹配规则映射的路径，按照<code>location</code>规则匹配成功后的请求，最终路径拼接为（alias+(path-location)），即：请求的URI资源的匹配成功的部分会被alias替换。</p>
+<p>详细的介绍和实验可参考：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000015408906">https://segmentfault.com/a/1190000015408906</a></p>
+<h1 id="关于default-server"><a href="#关于default-server" class="headerlink" title="关于default server"></a>关于default server</h1><p>nginx 的 default_server 指令可以定义默认的 server 去处理一些没有匹配到 server_name 的请求，如果没有显式定义，则会选取第一个定义的 server 作为 default_server。<br>nginx 批量载入配置 conf 时会按 ascii 排序载入，这就会以 server_a.conf server_b.conf server_c.conf 的顺序载入，如果没有声明 default_server 的话，那 server_a 会作为默认的 server 去处理 未绑定域名&#x2F;ip 的请求。<br>建议显式指定 default server，因为我们在配置虚拟主机或多业务时，会存有多个 server 配置文件，如果使用隐式方式选取第一个被载入的 server 作为 default server 的话，我们还要时刻去确认谁是被第一个载入的，容易产生不必要的麻烦和风险。</p>
+<h2 id="显式的定义一个-default-server"><a href="#显式的定义一个-default-server" class="headerlink" title="显式的定义一个 default server"></a>显式的定义一个 default server</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">http &#123;</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name www.a.com;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80;</span><br><span class="line">        server_name www.b.com;</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    # 显式的定义一个 default server</span><br><span class="line">    server &#123;</span><br><span class="line">        listen 80 default_server;</span><br><span class="line">        server_name _;</span><br><span class="line">        return 403; # 403 forbidden</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>（完）</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">nginx</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2021/10/26/211119-nginx-use/">展开全文 >></a>
         </p>
       
 
@@ -993,7 +1305,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
+      <a class="extend prev" rel="prev" href="/">&amp;laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">Next &amp;raquo;</a>
     </nav>
   
 
@@ -1084,11 +1396,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">GitHub</a>
+                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1101,10 +1417,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">工控机</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1148,15 +1460,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">Node.js</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">DevTools</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CLI</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1192,22 +1504,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">String</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">English</a>
               </li>
              
@@ -1217,10 +1513,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">lombok</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1292,15 +1584,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">cache</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">kafka</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1313,30 +1601,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Voovan</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1372,6 +1636,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">tls</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ca</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">Java</a>
               </li>
              
@@ -1384,7 +1656,39 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+                <a href="javascript:void(0)" class="js-tag color4">树莓派</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">dockerfile</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">centos</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">firewall</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">curl</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">wget</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">discuz</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">dns</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1392,7 +1696,107 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">harbor</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">helm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">innoSetup</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">java调用C#</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">jenkins</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">k8s</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">chrony</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">ntpdate</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">lvm</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">nfs</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">nginx</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">vsftp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">temp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">heap、stack</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">堆、栈</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">常量池</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">String</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">jQuery</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">cache</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">缓存</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">网络</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">application.properties</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">SpringBoot</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">BAT</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">批处理</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CMD</a>
               </li>
             
             <div class="clearfix"></div>
